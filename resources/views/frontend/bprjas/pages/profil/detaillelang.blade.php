@@ -4,7 +4,7 @@
 
 <style>
   .common-hero {
-    background: url('{{ asset(env(' GLOBAL_TOPPAGE')) }}') no-repeat center center;
+    background: url('{{ asset(env('GLOBAL_TOPPAGE')) }}') no-repeat center center;
     background-size: contain;
     /* default untuk desktop */
     background-position: center;
@@ -38,7 +38,6 @@
     .common-hero h2,
     .common-hero .title {
       font-size: 20px;
-      /* sesuaikan ukuran teks agar pas di mobile */
       font-weight: bold;
       color: #000;
       /* atau putih jika kontras dengan background */
@@ -118,9 +117,8 @@
             </div>
           </div>
 
-          <!-- Tombol Ikuti -->
-          <a href="#" class="btn btn-primary w-100 fw-bold mb-4" style="font-size:14px; padding:8px 12px;">
-            IKUTI LELANG
+          <a href="https://wa.me/6281326043051" target="_blank" class="btn btn-primary w-100 fw-bold mb-4" style="font-size:14px; padding:8px 12px;">
+            HUBUNGI
           </a>
 
           <!-- Tabs -->

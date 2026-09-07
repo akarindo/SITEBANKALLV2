@@ -190,7 +190,7 @@
          <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
             @foreach ($berita as $item)
             <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-               <a href="{{ route('detailberita', $item->id) }}" class="text-decoration-none text-dark">
+               <a href="{{ route('detberita', $item->id) }}" class="text-decoration-none text-dark">
                   <img src="/recfil?display=true&rf={{ $item->thumbnail }}" class="img-fluid" alt="{{ $item->title }}">
                   <div class="portfolio-info">
                      <h4>{{ $item->title }}</h4>

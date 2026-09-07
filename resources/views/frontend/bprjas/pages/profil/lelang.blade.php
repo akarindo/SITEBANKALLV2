@@ -187,7 +187,7 @@
                     <p class="small fw-bold text-primary mb-2">
                       Batas Akhir Setor Uang Jaminan<br>{{ \Carbon\Carbon::parse($item->selesai)->format('d-m-Y') }}
                     </p>
-                    <span class="btn btn-sm btn-success w-100 fw-bold">OPEN BIDDING</span>
+                    <span class="btn btn-sm btn-success w-100 fw-bold">DETAIL</span>
                   </div>
                 </div>
               </a>

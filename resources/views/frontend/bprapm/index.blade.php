@@ -374,52 +374,45 @@
             <div class="container">
                 <div class="row justify-content-center">
 
-                   <div class="col-lg-10">
-    <div class="wow fadeInUp" data-wow-delay=".4s">
+                    <div class="col-lg-10">
+                        <div class="wow fadeInUp" data-wow-delay=".4s">
 
-        <div class="sec-heading style-4 text-center mb-4">
-            <span class="sub-title">
-                <i class="tji-box"></i>Video
-            </span>
-            <h2 class="sec-title title-anim">
-                Arthapuspa Video
-            </h2>
-        </div>
+                            <div class="sec-heading style-4 text-center mb-4">
+                                <span class="sub-title">
+                                    <i class="tji-box"></i>Video
+                                </span>
+                                <h2 class="sec-title title-anim">
+                                    Arthapuspa Video
+                                </h2>
+                            </div>
+                            <div class="row g-4 justify-content-center">
 
-        <!-- Row untuk membuat layout grid 2 kolom -->
-        <div class="row g-4 justify-content-center">
-
-            <!-- Video 1 -->
-            <div class="col-md-6">
-                <div style="border-radius:20px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.15);">
-                    <div class="ratio ratio-16x9">
-                        <iframe src="https://www.youtube.com/embed/F037p6zEgsI" 
-                                title="YouTube video"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                        </iframe>
+                                <!-- Video 1 -->
+                                <div class="col-md-6">
+                                    <div style="border-radius:20px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.15);">
+                                        <div class="ratio ratio-16x9">
+                                            <iframe src="https://www.youtube.com/embed/F037p6zEgsI" 
+                                                    title="YouTube video"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowfullscreen>
+                                            </iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="border-radius:20px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.15);">
+                                        <div class="ratio ratio-16x9">
+                                            <iframe src="https://www.youtube.com/embed/Lc1X3tJAZNg?si=AHWlVaGwG3PA31VA" 
+                                                    title="YouTube video"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowfullscreen>
+                                            </iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Video 2 -->
-            <div class="col-md-6">
-                <div style="border-radius:20px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.15);">
-                    <div class="ratio ratio-16x9">
-                        <iframe src="https://www.youtube.com/embed/Lc1X3tJAZNg?si=AHWlVaGwG3PA31VA" 
-                                title="YouTube video"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                        </iframe>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</div>
-
                 </div>
             </div>
 

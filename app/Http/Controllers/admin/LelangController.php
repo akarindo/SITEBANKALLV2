@@ -60,7 +60,7 @@ class LelangController extends Controller
             'urutan' => 'required|numeric',
             'tag' => 'required',
             'kategori' => 'required',
-            'title' => ['required', Rule::unique('lelang')->where(function ($query) use ($r) {
+            'title' => ['required', Rule::unique('lelangs')->where(function ($query) use ($r) {
                 if ($r->txtId) {
                     return $query->where('id', '!=', $r->txtId);
                 }

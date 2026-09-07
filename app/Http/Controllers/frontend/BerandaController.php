@@ -17,11 +17,13 @@ class BerandaController extends Controller
 {
     public function index()
     {
-
+        $today = now()->toDateString();
         $data['baner'] = BannerModel::where('type', 0)
             ->orderBy('created_at', 'DESC')
             ->get();
         $data['berita'] = CommonPagesModel::where('type', 0)
+            ->whereDate('tanggal_tampil', '<=', $today)
+            ->orderBy('tanggal_tampil', 'desc')
             ->take(3)
             ->get();
         $data['event'] = CommonPagesModel::where('type', 1)->get();
