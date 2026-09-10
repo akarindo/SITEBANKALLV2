@@ -119,9 +119,15 @@
           </div>
 
           <!-- Tombol Ikuti -->
+          @if ($lelang->link)
+          <a href="{{$lelang->link}}" class="btn btn-primary w-100 fw-bold mb-4" style="font-size:14px; padding:8px 12px;">
+            IKUTI LELANG
+          </a>
+          @else
           <a href="#" class="btn btn-primary w-100 fw-bold mb-4" style="font-size:14px; padding:8px 12px;">
             IKUTI LELANG
           </a>
+          @endif
 
           <!-- Tabs -->
           <ul class="nav nav-tabs border-0 mb-3 small" id="detailTab" role="tablist" style="font-size:14px;">
