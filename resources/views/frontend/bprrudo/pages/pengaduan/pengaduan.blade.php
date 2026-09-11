@@ -378,6 +378,21 @@
 
                 </div>
             </div>
+            <div class="row justify-content-center mt-4">
+    <div class="col-md-8 text-center" style="font-size: 14px; color: #555; line-height: 1.6;">
+        <p class="mb-3">
+            Apabila penanganan penyelesaian pengaduan oleh PT BPR Rudo Indobank belum mencapai kesepakatan bagi kedua belah pihak, maka nasabah dapat menyampaikan pengajuan lebih lanjut ke Otoritas Jasa Keuangan (OJK) melalui:
+        </p>
+        <p class="mb-3">
+            <strong>1. Kontak Resmi OJK:</strong> 157 &nbsp;|&nbsp; <strong>WhatsApp:</strong> 081 157 157 157<br>
+            <strong>2. Aplikasi Portal Pelindungan Konsumen (APPK):</strong> 
+            <a href="https://kontak157.ojk.go.id" target="_blank" style="color: #1a29f1;">https://kontak157.ojk.go.id</a>
+        </p>
+        <p>
+            Apabila pengaduan telah dilakukan upaya penyelesaian oleh PT BPR Rudo Indobank namun ditolak, nasabah dapat melaporkan ke Lembaga Alternatif Penyelesaian (LAPS) melalui Aplikasi Portal Pelindungan Konsumen (APPK) sebagaimana telah diatur dalam Peraturan Otoritas Jasa Keuangan (POJK).
+        </p>
+    </div>
+</div>
             <!-- GAMBAR STATIS DI BAWAH BUTTON -->
             <div class="row justify-content-center mt-4">
                 <div class="col-md-12 text-center" style="margin-top:80px;">
