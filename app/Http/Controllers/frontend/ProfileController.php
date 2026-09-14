@@ -13,9 +13,8 @@ class ProfileController extends Controller
 
         $data['profil'] = ProfileModel::where('type', 0)
             ->first();
-        // return $data['profil'];
 
-        return view(ENV('GLOBAL_PROFILE'), $data);
+        return view(config('subdomain.GLOBAL_PROFILE'), $data);
     }
 
     public function sejarah()
@@ -24,7 +23,7 @@ class ProfileController extends Controller
         $data['sejarah'] = ProfileModel::where('type', 1)
             ->first();
 
-        return view(ENV('GLOBAL_SEJARAH'), $data);
+        return view(config('subdomain.GLOBAL_SEJARAH'), $data);
     }
 
     public function pengurus()
@@ -34,7 +33,7 @@ class ProfileController extends Controller
             ->first();
 
 
-        return view(ENV('GLOBAL_PENGURUS'), $data);
+        return view(config('subdomain.GLOBAL_PENGURUS'), $data);
     }
 
     public function organisasi()
@@ -44,20 +43,20 @@ class ProfileController extends Controller
             ->first();
 
 
-        return view(ENV('GLOBAL_ORGANISASI'), $data);
+        return view(config('subdomain.GLOBAL_ORGANISASI'), $data);
     }
 
     public function visimisi()
     {
 
 
-        return view(ENV('GLOBAL_VISIMISI'));
+        return view(config('subdomain.GLOBAL_VISIMISI'));
     }
 
     public function corevalue()
     {
 
 
-        return view(ENV('GLOBAL_COREVALUE'));
+        return view(config('subdomain.GLOBAL_COREVALUE'));
     }
 }

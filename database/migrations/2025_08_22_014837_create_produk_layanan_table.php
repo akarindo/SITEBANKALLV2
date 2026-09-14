@@ -18,10 +18,10 @@ return new class extends Migration
                 $table->integer('kategori')->default(0)->comment('0:Kredit; 1:Deposito; 2:Tabungan; 3:Layanan; 4:Lainnya;');
                 $table->integer('urutan')->default(0);
                 $table->json('tag')->nullable();
-                $table->text('title')->unique();
-                $table->text('slug')->unique();
-                $table->text('banner');
-                $table->text('thumbnail')->nullable();
+                $table->string('title')->unique();
+                $table->string('slug')->unique();
+                $table->string('banner');
+                $table->string('thumbnail')->nullable();
                 $table->longText('content');
                 $table->bigInteger('created_by')->nullable();
                 $table->bigInteger('updated_by')->nullable();

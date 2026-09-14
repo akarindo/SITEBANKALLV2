@@ -178,7 +178,7 @@
                      <h4 class="text-white mb-4">Informasi Kontak</h4>
 
 
-                     <a href="tel:085124525" style="color: #fff"><i class="fas fa-phone me-2" style="color: #fff"></i>+0851
+                     <a href="tel:051824525" style="color: #fff"><i class="fas fa-phone me-2" style="color: #fff"></i>+0518
                          24525</a>
                      <a href="https://wa.me/6285348046915" style="color: #fff" class="mb-3">
                          <i class="fab fa-whatsapp me-2" style="color: #fff"></i> 085348046915
@@ -188,7 +188,7 @@
                      <a href="#" style="color: #fff"><i class="fa fa-map-marker-alt me-2"
                              style="color: #fff; "></i>Jl. Kenanga No.2 Desa Dirgahayu Kelurahan Kotabaru tengah
                          Kabupaten Kotabaru
-                         Kabupaten Tegal</a>
+                        </a>
 
                  </div>
              </div>

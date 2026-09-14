@@ -18,8 +18,7 @@ class UmkmController extends Controller
 
 
 
-        return view(ENV('GLOBAL_UMKM'), $data);
-
+        return view(config('subdomain.GLOBAL_UMKM'), $data);
     }
     public function detumkm($id)
     {
@@ -27,6 +26,6 @@ class UmkmController extends Controller
 
         $data['umkm'] = $first;
 
-        return view(ENV('GLOBAL_DETAILUMKM'), $data);
+        return view(config('subdomain.GLOBAL_DETAILUMKM'), $data);
     }
 }

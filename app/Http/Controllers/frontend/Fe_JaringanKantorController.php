@@ -8,15 +8,11 @@ use Illuminate\Http\Request;
 
 class Fe_JaringanKantorController extends Controller
 {
-public function index()
-{
-    // ambil semua data urut sesuai inputan
-    $data['kantor'] = JaringanKantorModel::orderBy('id', 'asc')->get();
+    public function index()
+    {
+        // ambil semua data urut sesuai inputan
+        $data['kantor'] = JaringanKantorModel::orderBy('id', 'asc')->get();
 
-    return view( ENV('GLOBAL_KANTOR'), $data);
-}
-
-
-
-
+        return view(config('subdomain.GLOBAL_KANTOR'), $data);
+    }
 }

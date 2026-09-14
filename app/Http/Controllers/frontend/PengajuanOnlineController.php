@@ -24,28 +24,26 @@ class PengajuanOnlineController extends Controller
     public function formpengajuankredit()
     {
         $data['produkkredit'] = ProdukLayananModel::where('kategori', 0)
-        ->get();
-        return view(ENV('FORMPENGAJUANKREDIT'), $data);
-
+            ->get();
+        return view(config('subdomain.FORMPENGAJUANKREDIT'), $data);
     }
 
     public function formpengajuandeposito()
     {
 
-        return view(ENV('FORMPENGAJUANDEPOSITO'));
-
+        return view(config('subdomain.FORMPENGAJUANDEPOSITO'));
     }
 
     public function formpengajuantabungan()
     {
-        $data['produktabungan'] = ProdukLayananModel::where('kategori',2)
-        ->get();
-         return view(ENV('FORMPENGAJUANTABUNGAN'), $data);
-
+        $data['produktabungan'] = ProdukLayananModel::where('kategori', 2)
+            ->get();
+        return view(config('subdomain.FORMPENGAJUANTABUNGAN'), $data);
     }
 
-    public function newformpengajuantabungan() {
-        return view(ENV('NEWFORMPENGAJUANTABUNGAN'), $data);
+    public function newformpengajuantabungan()
+    {
+        return view(config('subdomain.NEWFORMPENGAJUANTABUNGAN'), $data);
     }
 
     public function savedata(Request $request)
@@ -114,7 +112,8 @@ class PengajuanOnlineController extends Controller
     }
 
 
-    public function savetabungan (Request $request) {
+    public function savetabungan(Request $request)
+    {
         $request->validate([
             // Section 1 - Informasi Umum
             'nama_cabang'            => 'required|string|max:255',
@@ -128,7 +127,7 @@ class PengajuanOnlineController extends Controller
             'rek_b.*'                => 'nullable|digits:1',
             'rek_c'                  => 'nullable|array|max:6',
             'rek_c.*'                => 'nullable|digits:1',
- 
+
             // Section 2 - Data Nasabah
             'no_cif'                 => 'nullable|string|max:50',
             'nama_lengkap'           => 'required|string|max:255',
@@ -143,7 +142,7 @@ class PengajuanOnlineController extends Controller
             'sudah_rekening'         => 'required|in:ya,tidak',
             'no_rekening_existing'   => 'nullable|string|max:50',
             'bertindak_untuk'        => 'required|in:diri_sendiri,wakil,wali_alamat,lainnya',
- 
+
             // Section 3 - Pemegang Rekening ke 2
             'no_cif_2'               => 'nullable|string|max:50',
             'nama_lengkap_2'         => 'nullable|string|max:255',
@@ -158,10 +157,10 @@ class PengajuanOnlineController extends Controller
             'sudah_rekening_2'       => 'nullable|in:ya,tidak',
             'no_rekening_existing_2' => 'nullable|string|max:50',
             'bertindak_untuk_2'      => 'nullable|in:diri_sendiri,wakil,wali_alamat,lainnya',
- 
+
             // Section 4 - Tabungan
             'jenis_tabungan'         => 'nullable|in:mekar,taraku,nugraha,rejeki,kurban,cinta_fitri,pendidikan,simpel,bungah,mekar_premio',
- 
+
             // Section 5 - Deposito
             'nominal_deposito'       => 'nullable|numeric|min:0',
             'terbilang'              => 'nullable|string|max:500',
@@ -172,7 +171,7 @@ class PengajuanOnlineController extends Controller
             'atas_nama'              => 'nullable|string|max:255',
             'no_rek_tujuan'          => 'nullable|string|max:50',
             'nama_bank'              => 'nullable|string|max:100',
- 
+
             // Section 6 - Auto Debet
             'angsuran_kredit'        => 'nullable|string|max:255',
             'auto_debet_lainnya'     => 'nullable|string|max:255',
@@ -183,7 +182,7 @@ class PengajuanOnlineController extends Controller
         $rekB = implode('', array_filter($request->input('rek_b', [])));
         $rekC = implode('', array_filter($request->input('rek_c', [])));
         $nomorRekening = ($rekA || $rekB || $rekC) ? "{$rekA}-{$rekB}-{$rekC}" : null;
- 
+
         PembukaanRekeningModel::create([
             // Section 1
             'nama_cabang'            => $request->nama_cabang,
@@ -192,7 +191,7 @@ class PengajuanOnlineController extends Controller
             'hubungan'               => $request->hubungan,
             'nomor_rekening'         => $nomorRekening,
             'tujuan'                 => $request->tujuan,
- 
+
             // Section 2
             'no_cif'                 => $request->no_cif,
             'nama_lengkap'           => $request->nama_lengkap,
@@ -207,7 +206,7 @@ class PengajuanOnlineController extends Controller
             'sudah_rekening'         => $request->sudah_rekening,
             'no_rekening_existing'   => $request->no_rekening_existing,
             'bertindak_untuk'        => $request->bertindak_untuk,
- 
+
             // Section 3
             'no_cif_2'               => $request->no_cif_2,
             'nama_lengkap_2'         => $request->nama_lengkap_2,
@@ -222,10 +221,10 @@ class PengajuanOnlineController extends Controller
             'sudah_rekening_2'       => $request->sudah_rekening_2,
             'no_rekening_existing_2' => $request->no_rekening_existing_2,
             'bertindak_untuk_2'      => $request->bertindak_untuk_2,
- 
+
             // Section 4
             'jenis_tabungan'         => $request->jenis_tabungan,
- 
+
             // Section 5
             'nominal_deposito'       => $request->nominal_deposito,
             'terbilang'              => $request->terbilang,
@@ -236,39 +235,38 @@ class PengajuanOnlineController extends Controller
             'atas_nama'              => $request->atas_nama,
             'no_rek_tujuan'          => $request->no_rek_tujuan,
             'nama_bank'              => $request->nama_bank,
- 
+
             // Section 6
             'angsuran_kredit'        => $request->angsuran_kredit,
             'auto_debet_lainnya'     => $request->auto_debet_lainnya,
         ]);
- 
+
         return redirect()->back()->with('success', 'Formulir pembukaan rekening berhasil disimpan.');
     }
 
     public function downloadformkredit($id)
     {
-         $data = PengajuanModel::with('masterKredit')->findOrFail($id);
+        $data = PengajuanModel::with('masterKredit')->findOrFail($id);
 
         $pdf = Pdf::loadView('frontend.bprtaruna.pages.pengajuanonline.pdfkredit', compact('data'));
 
-        return $pdf->stream('pengajuan_kredit'.$data->id.'.pdf');
+        return $pdf->stream('pengajuan_kredit' . $data->id . '.pdf');
     }
 
-        public function downloadformdeposito($id)
+    public function downloadformdeposito($id)
     {
         $data = PengajuanModel::findOrFail($id);
 
         $pdf = Pdf::loadView('frontend.bprtaruna.pages.pengajuanonline.pdfdeposito', compact('data'));
 
-        return $pdf->stream('pengajuan_kredit'.$data->id.'.pdf');
+        return $pdf->stream('pengajuan_kredit' . $data->id . '.pdf');
     }
 
-        public function downloadformtabungan($id)
+    public function downloadformtabungan($id)
     {
-          $data = PengajuanModel::with('masterTabungan')->findOrFail($id);
+        $data = PengajuanModel::with('masterTabungan')->findOrFail($id);
         $pdf = Pdf::loadView('frontend.bprtaruna.pages.pengajuanonline.pdftabungan', compact('data'));
 
-        return $pdf->stream('pengajuan_kredit'.$data->id.'.pdf');
+        return $pdf->stream('pengajuan_kredit' . $data->id . '.pdf');
     }
-
 }

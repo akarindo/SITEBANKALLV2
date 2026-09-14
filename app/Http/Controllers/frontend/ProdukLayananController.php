@@ -17,7 +17,7 @@ class ProdukLayananController extends Controller
             ->where('kategori', 0)
             ->get();
 
-        return view(ENV('GLOBAL_KREDIT'), $data);
+        return view(config('subdomain.GLOBAL_KREDIT'), $data);
     }
 
     public function detkredit($id)
@@ -35,7 +35,7 @@ class ProdukLayananController extends Controller
             //  ->take(5)
             ->get();
 
-        return view(ENV('GLOBAL_DETAILKREDIT'), $data);
+        return view(config('subdomain.GLOBAL_DETAILKREDIT'), $data);
     }
 
     public function deposito()
@@ -45,7 +45,7 @@ class ProdukLayananController extends Controller
             ->where('kategori', 1)
             ->get();
 
-        return view(ENV('GLOBAL_DEPOSITO'), $data);
+        return view(config('subdomain.GLOBAL_DEPOSITO'), $data);
     }
 
     public function detdeposito($id)
@@ -62,7 +62,7 @@ class ProdukLayananController extends Controller
             ->orderBy('created_at', 'desc')
             //  ->take(5)
             ->get();
-        return view(ENV('GLOBAL_DETAILDEPOSITO'), $data);
+        return view(config('subdomain.GLOBAL_DETAILDEPOSITO'), $data);
     }
 
     public function tabungan()
@@ -77,7 +77,7 @@ class ProdukLayananController extends Controller
                 ->get();
         }
 
-        return view(ENV('GLOBAL_TABUNGAN'), $data);
+        return view(config('subdomain.GLOBAL_TABUNGAN'), $data);
     }
     public function dettabungan($id)
     {
@@ -93,13 +93,13 @@ class ProdukLayananController extends Controller
             ->orderBy('created_at', 'desc')
             //  ->take(5)
             ->get();
-        return view(ENV('GLOBAL_DETAILTABUNGAN'), $data);
+        return view(config('subdomain.GLOBAL_DETAILTABUNGAN'), $data);
     }
 
     public function simulasiKredit()
     {
 
-        return view(ENV('SIMULASI_KREDIT'));
+        return view(config('subdomain.SIMULASI_KREDIT'));
     }
 
     public function simulasi()
@@ -111,13 +111,13 @@ class ProdukLayananController extends Controller
     {
         $data['tabungan'] = MasterPengajuanTabunganModel::get();
 
-        return view(ENV('SIMULASI_TABUNGAN'), $data);
+        return view(config('subdomain.SIMULASI_TABUNGAN'), $data);
     }
 
     public function simulasiDeposito()
     {
         $data['deposito'] = MasterPengajuanDepositoModel::get();
 
-        return view(ENV('SIMULASI_DEPOSITO'), $data);
+        return view(config('subdomain.SIMULASI_DEPOSITO'), $data);
     }
 }

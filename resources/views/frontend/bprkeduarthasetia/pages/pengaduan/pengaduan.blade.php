@@ -516,7 +516,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Nama BPR</label>
-                    <input type="text" name="namaxx" class="form-control" value="{{ ENV('APP_NAME') }}">
+                    <input type="text" name="namaxx" class="form-control" value="{{ config('subdomain.APP_NAME') }}">
                   </div>
                 </div>
 

@@ -29,20 +29,20 @@ class AppServiceProvider extends ServiceProvider
         setlocale(LC_TIME, 'id_ID.UTF-8');
 
         View::composer('*', function ($view) {
-           
+
             // kantor global
             $kantors = JaringanKantorModel::all();
             $view->with('kantorglobal', $kantors);
 
             // SEO GLOBAL (tanpa page)
             $og = SeoSettingModel::select('title', 'description', 'image')
-                    ->latest()
-                    ->first();
-    
+                ->latest()
+                ->first();
+
             if (!$og) {
                 $og = (object)[
-                    'title' =>  ENV('APP_NAME'),
-                    'description' => 'Website resmi ' . ENV('APP_NAME'),
+                    'title' =>  config('subdomain.APP_NAME'),
+                    'description' => 'Website resmi ' . config('subdomain.APP_NAME'),
                     'image' => ''
                 ];
             }
@@ -51,13 +51,13 @@ class AppServiceProvider extends ServiceProvider
 
             // visitor global footer
             $adminIp = null;
-              // $adminIp = (auth()->check() && auth()->user()->role == 0)
-        //     ? $request->ip()
-        //     : null;
+            // $adminIp = (auth()->check() && auth()->user()->role == 0)
+            //     ? $request->ip()
+            //     : null;
 
             $total_visitor = Visitor::when($adminIp, function ($query) use ($adminIp) {
-                    $query->where('ip_address', '!=', $adminIp);
-                })
+                $query->where('ip_address', '!=', $adminIp);
+            })
                 ->distinct('ip_address')
                 ->count('ip_address');
 
@@ -70,8 +70,6 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with('total_visitor', $total_visitor);
             $view->with('today_visitor', $today_visitor);
-
-            
         });
     }
 }

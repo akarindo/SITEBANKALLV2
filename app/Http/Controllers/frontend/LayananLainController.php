@@ -13,6 +13,6 @@ class LayananLainController extends Controller
 	public function index()
 	{
 
-        return view(ENV('GLOBAL_LAYANANLAIN'));
+		return view(config('subdomain.GLOBAL_LAYANANLAIN'));
 	}
 }

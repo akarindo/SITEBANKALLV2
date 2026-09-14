@@ -15,10 +15,8 @@ class InformasiController extends Controller
     public function detevent($id)
     {
         // detail event
-        $data['event'] = CommonPagesModel::findOrFail($id);
-        ;
-        $data['eventberita'] = CommonPagesModel::findOrFail($id);
-        ;
+        $data['event'] = CommonPagesModel::findOrFail($id);;
+        $data['eventberita'] = CommonPagesModel::findOrFail($id);;
         $data['multibaner'] = MultiBannerPagesModel::where('page_id', $id)->get();
 
 
@@ -29,8 +27,7 @@ class InformasiController extends Controller
             ->take(5)
             ->get();
 
-        return view(ENV('GLOBAL_DETAILEVENT'), $data);
-
+        return view(config('subdomain.GLOBAL_DETAILEVENT'), $data);
     }
 
     public function detberita($id)
@@ -50,7 +47,7 @@ class InformasiController extends Controller
             ->take(5)
             ->get();
 
-         return view(ENV('GLOBAL_DETAILBERITA'), $data);
+        return view(config('subdomain.GLOBAL_DETAILBERITA'), $data);
     }
 
     public function detliterasi($id)
@@ -81,7 +78,7 @@ class InformasiController extends Controller
         $data['multibaner'] = MultiBannerPagesModel::get();
 
 
-        return view(ENV('GLOBAL_INFORMASI'), $data);
+        return view(config('subdomain.GLOBAL_INFORMASI'), $data);
     }
 
     public function eventkegiatan()
@@ -94,7 +91,7 @@ class InformasiController extends Controller
 
         $data['multibaner'] = MultiBannerPagesModel::get();
 
-        return view(ENV('GLOBAL_EVENT'), $data);
+        return view(config('subdomain.GLOBAL_EVENT'), $data);
     }
 
     function contact(Request $r)
@@ -112,7 +109,7 @@ class InformasiController extends Controller
 
         $data['kantor'] = JaringanKantorModel::get();
         // return view('frontend.bprjas.pages.profil.contact', $data);
-         return view('frontend.bprstaja.pages.profil.contact', $data);
+        return view('frontend.bprstaja.pages.profil.contact', $data);
     }
 
     public function kirim(Request $request)
@@ -133,5 +130,4 @@ class InformasiController extends Controller
 
         return back()->with('success', 'Pesan berhasil dikirim!');
     }
-
 }

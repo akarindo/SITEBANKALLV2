@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 class DashboardUserController extends Controller
 {
     public function index()
-{
-    // ambil semua data urut sesuai inputan
-  
+    {
+        // ambil semua data urut sesuai inputan
 
-    return view(ENV('GLOBAL_DASHBOARDUSER'));
-}
+
+        return view(config('subdomain.GLOBAL_DASHBOARDUSER'));
+    }
 }

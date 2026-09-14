@@ -2,17 +2,17 @@
 <html lang="en">
 
 <head>
-    
-    @include( ENV ('GLOBAL_INCHEAD'))
-   
+
+    @include( config('subdomain.GLOBAL_INCHEAD'))
+
 </head>
 
 <body id="bg">
     {{-- <div id="loading-area"></div> --}}
     <div class="page-wraper">
-        
-        @include( ENV('GLOBAL_INCHEADER'))
-      
+
+        @include( config('subdomain.GLOBAL_INCHEADER'))
+
 
         <!-- Content Wrapper -->
         <main id="main">
@@ -24,13 +24,13 @@
             @endif
             @yield('content')
         </main>
-  
+
         {{-- <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a> --}}
     </div>
 
     @include('frontend.bprapm.layout.script')
-    @include(ENV('GLOBAL_INCFOOTER'))
+    @include(config('subdomain.GLOBAL_INCFOOTER'))
 
 
 </body>

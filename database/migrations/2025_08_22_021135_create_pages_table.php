@@ -20,7 +20,7 @@ return new class extends Migration
                 $table->text('kategori')->nullable();
                 // $table->text('title')->unique();
                 $table->text('title')->nullable();
-                $table->text('slug')->unique();
+                $table->string('slug')->unique();
                 $table->text('banner');
                 $table->text('thumbnail')->nullable();
                 $table->longText('content');

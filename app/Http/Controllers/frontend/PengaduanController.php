@@ -24,8 +24,7 @@ class PengaduanController extends Controller
         $data['produk'] = ProdukLayananModel::get();
         $data['jabatan'] = JabatanModel::get();
 
-        return view(ENV('GLOBAL_PENGADUAN'), $data);
-
+        return view(config('subdomain.GLOBAL_PENGADUAN'), $data);
     }
 
     public function getSub($form)
@@ -43,7 +42,6 @@ class PengaduanController extends Controller
                     'user' => Auth::user()
                 ]);
             }
-
         }
 
         return response()->json([
@@ -104,8 +102,7 @@ class PengaduanController extends Controller
             'otp_code' => 'required|numeric|digits:6'
         ]);
 
-        $user = User::
-            where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
         // Find valid OTP
         $otp = OtpCode::where('user_id', $user->id)
@@ -253,7 +250,7 @@ class PengaduanController extends Controller
         }
         $data->bukti2 = json_encode($bukti2);
 
-        
+
 
         $data->save();
 
@@ -293,7 +290,6 @@ class PengaduanController extends Controller
 
 
         return view('frontend.bprjas.pages.pengaduan.dashboarduser.ceksaldo');
-
     }
     public function lacakpengaduan()
     {
@@ -345,6 +341,4 @@ class PengaduanController extends Controller
             'data' => $data
         ]);
     }
-
-
 }

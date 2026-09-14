@@ -68,7 +68,7 @@
                                       <h3>Tautan</h3>
         
                                       <ul class="menu-list">
-                                           <li><a href="/lelang-jualaset">info lelang </a></li>
+                                           <li><a href="/lelang-jualaset">Info Lelang </a></li>
                                            {{-- <li><a href="#">Jual Aset</a></li> --}}
                                            <li><a href="rekrutmen">E - Recruitment</a></li>
                                            <li><a href="pengaduan">Pengaduan Pelanggaran</a></li>

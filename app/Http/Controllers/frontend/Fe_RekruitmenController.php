@@ -16,7 +16,7 @@ class Fe_RekruitmenController extends Controller
 
         $rekruitmen = RekruitmenModel::whereDate('tanggal_posting', '<=', $today)
             ->whereDate('tanggal_berakhir', '>=', $today)
-             ->orderBy('tanggal_posting', 'desc')
+            ->orderBy('tanggal_posting', 'desc')
             ->get();
 
         // Mapping tipe_pekerjaan ke text
@@ -48,7 +48,7 @@ class Fe_RekruitmenController extends Controller
             default => 'Tidak Diketahui',
         };
 
-        return view(ENV('GLOBAL_DETAILKARIR'), [
+        return view(config('subdomain.GLOBAL_DETAILKARIR'), [
             'detrekrutmen' => $detrekrutmen
         ]);
     }

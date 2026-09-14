@@ -40,13 +40,12 @@ class LelangController extends Controller
 
 
         return view(env('GLOBAL_DETAILLELANG'), $data);
-
     }
 
     // public function detlelang() {
 
 
-    //     return view(ENV('GLOBAL_DETAILLELANG'));
+    //     return view(config('subdomain.GLOBAL_DETAILLELANG'));
 
     // }
 }

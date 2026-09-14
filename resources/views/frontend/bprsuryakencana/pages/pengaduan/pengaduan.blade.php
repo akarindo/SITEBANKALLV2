@@ -650,7 +650,7 @@
                                         <div class="col-md-6 mb-3">
                                             <label for="namaxx_2" class="form-label fw-semibold">Nama BPR</label>
                                             <input type="text" name="namaxx" id="namaxx_2" class="form-control"
-                                                value="{{ ENV('APP_NAME') }}" readonly>
+                                                value="{{ config('subdomain.APP_NAME') }}" readonly>
                                         </div>
                                         <!-- name="lokasixx" -->
                                         <div class="col-md-6 mb-3">

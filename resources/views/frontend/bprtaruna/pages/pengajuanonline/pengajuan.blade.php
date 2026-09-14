@@ -31,7 +31,7 @@
     </style>
 
     <div style="width:100%; overflow:hidden; ">
-        <img src="{{ asset('frontend/bprtaruna/assets/img/profil/taruna.jpeg') }}" style="object-fit: fill; margin-top: 75px;" alt="Banner" 
+        <img src="{{ asset('frontend/bprtaruna/assets/img/profil/tarunav2.png') }}" style="object-fit: fill; margin-top: 75px;" alt="Banner" 
             class="banner-img">
     </div>
 

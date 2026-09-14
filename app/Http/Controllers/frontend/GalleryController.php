@@ -19,8 +19,7 @@ class GalleryController extends Controller
                 ->groupBy('kategori');
         })->get();
 
-        return view(ENV('GLOBAL_GALLERY'), $data);
-
+        return view(config('subdomain.GLOBAL_GALLERY'), $data);
     }
 
     public function detgallery($id)
@@ -31,7 +30,6 @@ class GalleryController extends Controller
 
         $data['header'] = $first;
 
-        return view(ENV('GLOBAL_DETAILGALLERY'), $data);
+        return view(config('subdomain.GLOBAL_DETAILGALLERY'), $data);
     }
-
 }

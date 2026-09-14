@@ -6,14 +6,80 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
-    name: Deploy and optimize Laravel
+    name: Deploy Laravel
     runs-on: ubuntu-latest
+    strategy:
+      # Website lain tetap diproses jika salah satu website gagal.
+      fail-fast: false
+      # Deploy satu per satu agar server Hostinger tidak terlalu terbebani.
+      max-parallel: 1
+      
     environment: hostinger
-
+    concurrency:
+      group: deploy-hostinger-main
+      cancel-in-progress: false
     steps:
-      - name: Jalankan deploy di server
+      # Mengambil isi repository ke GitHub Runner
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Membuat folder khusus deployment.
+      # Folder/file runtime server tidak dimasukkan.
+      - name: Siapkan file deployment
+        shell: bash
+        run: |
+          set -e
+
+          rm -rf deploy-package
+          mkdir -p deploy-package
+
+          rsync -a ./ deploy-package/ \
+            --exclude='/deploy-package/' \
+            --exclude='/.git/' \
+            --exclude='/.github/' \
+            --exclude='/.env' \
+            --exclude='/.env.*' \
+            --exclude='/storage/' \
+            --exclude='/public/storage' \
+            --exclude='/bootstrap/cache/' \
+            --exclude='/vendor/' \
+            --exclude='/node_modules/' \
+            --exclude='/tests/' \
+            --exclude='/phpunit.xml' \
+            --exclude='/README.md'
+
+          echo "File deployment berhasil disiapkan."
+
+      # Menimpa file yang sama, tetapi tidak menghapus file server lainnya
+      - name: Upload source code ke Hostinger
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+
+          source: "deploy-package"
+          target: "/home/u748550814/domains/bprphm.com/public_html"
+
+          # Menghilangkan folder deploy-package pada hasil upload
+          strip_components: 1
+
+          # Menimpa file yang sudah ada
+          overwrite: true
+
+          # Jangan hapus folder tujuan sebelum upload
+          rm: false
+
+          command_timeout: 15m
+
+      # Menjalankan perintah Laravel setelah upload selesai
+      - name: Optimasi Laravel di server
         uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.HOST }}
@@ -22,43 +88,38 @@ jobs:
           port: ${{ secrets.PORT }}
           command_timeout: 15m
           script: |
-            set -e
-
-            PROJECT_PATH="/home/u748550814/domains/bprphm.com/public_html"
-
-            cd "$PROJECT_PATH"
-
-            echo "Direktori aktif:"
-            pwd
-
-            if [ ! -f artisan ]; then
-              echo "ERROR: File artisan tidak ditemukan."
-              exit 1
-            fi
-
-            if [ ! -f .env ]; then
-              echo "ERROR: File .env staging tidak ditemukan."
-              exit 1
-            fi
-
-            echo "Menunggu proses deploy Git Hostinger..."
-            sleep 60
-
-            echo "Membersihkan seluruh cache lama..."
-            php artisan optimize:clear
-
-            echo "Memastikan konfigurasi menggunakan .env staging..."
-            php artisan config:clear
-
-            echo "Menjalankan database migration..."
-            php artisan migrate --force
-
-            echo "Membuat ulang cache Laravel..."
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
-
-            echo "Informasi environment:"
-            php artisan about --only=environment
-
-            echo "Deploy Laravel staging selesai."
+           set -e
+           PROJECT_PATH="/home/u748550814/domains/bprphm.com/public_html"
+           cd "$PROJECT_PATH"
+           if [ ! -f artisan ]; then
+           echo "ERROR: File artisan tidak ditemukan."
+           exit 1
+           fi
+           
+           if [ ! -f .env ]; then
+           echo "ERROR: File .env tidak ditemukan."
+           exit 1
+           fi
+           
+           echo "Menghapus cache package lama..."
+           rm -f bootstrap/cache/config.php
+           rm -f bootstrap/cache/packages.php
+           rm -f bootstrap/cache/services.php
+           rm -f bootstrap/cache/events.php
+           rm -f bootstrap/cache/routes-*.php
+           
+           echo "Memasang dependency production..."
+           composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-progress
+           
+           echo "Membersihkan cache Laravel..."
+           php artisan optimize:clear
+           
+           echo "Menjalankan migration..."
+           php artisan migrate --force
+           
+           echo "Membuat ulang cache Laravel..."
+           php artisan config:cache
+           php artisan route:cache
+           php artisan view:cache
+           
+           echo "Deploy selesai."

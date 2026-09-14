@@ -2,16 +2,16 @@
 <html lang="en">
 
 <head>
-    
-    @include( ENV ('GLOBAL_INCHEAD'))
-   
+
+    @include( config('subdomain.GLOBAL_INCHEAD'))
+
 </head>
 
 <body id="bg">
     {{-- <div id="loading-area"></div> --}}
     {{-- <div class="page-wraper"> --}}
-        
-        @include( ENV('GLOBAL_INCHEADER'))
+
+        @include( config('subdomain.GLOBAL_INCHEADER'))
         {{-- @include('frontend.bprjas.layout.sidebar') --}}
 
         <!-- Content Wrapper -->
@@ -32,9 +32,9 @@
     </div>
 
     @include('frontend.bprjas.layout.script')
-    @include(ENV('GLOBAL_INCFOOTER'))
+    @include(config('subdomain.GLOBAL_INCFOOTER'))
 
-    
+
 
 
 

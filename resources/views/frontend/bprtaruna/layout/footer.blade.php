@@ -204,7 +204,7 @@
                                 <img src="{{asset('frontend/nusaintim/assets/img/icons/footer1-icon1.png')}}" alt="">
                             </div>
                             <div class="pera">
-                                <a href="tel:(0291) 4311911">(0291) 4311911</a>
+                                <a href="tel:(0291) 431191">(0291) 431191</a>
                             </div>
                         </div>
 

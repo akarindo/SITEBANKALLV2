@@ -39,7 +39,7 @@
 
                             <div class="card-body">
                                 <h6 class="text-muted" style="margin-bottom:5px;">Laporan Publikasi</h6>
-                                <h6 class="fw-bold">{{ ENV('APP_NAME') }} {{ $tahun }}</h6>
+                                <h6 class="fw-bold">{{ config('subdomain.APP_NAME') }} {{ $tahun }}</h6>
                                 <br>
                                 <div class="d-grid gap-2">
                                     @foreach ($laporanTahun->groupBy('triwulan') as $triwulan => $items)
