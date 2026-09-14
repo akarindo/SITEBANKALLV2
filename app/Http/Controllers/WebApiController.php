@@ -495,10 +495,34 @@ class WebApiController extends Controller
 			->limit(3)
 			->get();
 
+		// icon taruna
+		$icondeposito = 'https://drive.google.com/uc?export=view&id=1soJp6HnayB_8QT0xPpVQpspCqHh9z0n1';
+		$icontabungan = 'https://drive.google.com/uc?export=view&id=11SH8WBGqsgv72UIGZYhC5mkURPq5lPKl';
+		$iconkredit = 'https://drive.google.com/uc?export=view&id=14V5F4zScr49Ohb9QFV1HtG519R_OAgUx';
+
+		// banner taruna
+		$bannerkredit = 'https://drive.google.com/uc?export=view&id=1NYJXvllYDZ0bNY8omeuJ0ayJ6XC5DFrp';
+		$bannertabungan = 'https://drive.google.com/uc?export=view&id=1y4YMgYFZ2DVzt--mW93mQ8CQ5dT27gud';
+		$bannerdeposito = 'https://drive.google.com/uc?export=view&id=1kWXNnt0ZIfXzsXotQNgYgpVPH862thZT';
 		return response()->json([
 			'success' => true,
+			'profile' => '',
+			'visi' => 'Menjadi BPR yang Bersih, Sehat, dan Terpercaya.',
+			'misi' => 'Memberikan pelayanan terbaik kepada nasabah serta berperan aktif membantu pemerintah dalam pengembangan UMKM.
+    Meningkatkan kinerja BPR yang sehat, kuat, efisien, profesional, dan berkesinambungan.
+    Memberikan pengetahuan tentang manajemen keuangan kepada nasabah.
+    Menjadikan pemasaran sebagai konsultan keuangan dan produk bagi nasabah.',
+			'phone' => '(0291) 4311911',
+			'whatsapp_display' => '085727144255',
+			'email' => 'banktaruna@gmail.com',
 			'message' => 'Data berhasil diambil',
 			'data' => $data,
+			'icontabungan' => $icontabungan,
+			'icondeposito' => $icondeposito,
+			'iconkredit' => $iconkredit,
+			'bannerkredit' => $bannerkredit,
+			'bannertabungan' => $bannertabungan,
+			'bannerdeposito' => $bannerdeposito,
 		]);
 	}
 
@@ -571,7 +595,8 @@ class WebApiController extends Controller
 			$data['jenis_produk'] = 'tabungan';
 			$data['jns_tab'] = $r->jenis_kredit;
 			$data['setor_awal'] = $r->jumlah_kredit;
-			$data['sumber_dn'] = $r->jangka_waktu;
+			$data['sumber_dn'] = $r->sumber_dn;
+			$data['cat_tmbhn'] = $r->cat_tmbhn;
 			$data['tujuan_bk_rek'] = $r->tujuan_kredit;
 		}
 		if ($r->jenis_produk == 'Deposito') {
@@ -579,8 +604,9 @@ class WebApiController extends Controller
 			$data['jenis_produk'] = 'deposito';
 			$data['jns_depo'] = $r->jenis_kredit;
 			$data['nmnl_depo'] = $r->jumlah_kredit;
-			$data['rek_pencairan'] = $r->jangka_waktu;
-			$data['cat_tmbhn'] = $r->tujuan_kredit;
+			$data['rek_pencairan'] = $r->rek_pencairan;
+			$data['cat_tmbhn'] = $r->cat_tmbhn;
+			$data['jngka_wkt'] = $r->jangka_waktu;
 		}
 
 		PengajuanModel::create($data);

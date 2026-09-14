@@ -55,6 +55,20 @@ class PengajuanModel extends Model
 
     public function masterKredit()
     {
+        if ($this->jns_depo != null) {
+            return $this->belongsTo(
+                \App\Models\MastePengajuanKreditModel::class,
+                'jns_depo',
+                'id'
+            );
+        }
+        if ($this->jns_tab != null) {
+            return $this->belongsTo(
+                \App\Models\MastePengajuanKreditModel::class,
+                'jns_tab',
+                'id'
+            );
+        }
         return $this->belongsTo(
             \App\Models\MastePengajuanKreditModel::class,
             'jns_kredit',
@@ -71,8 +85,4 @@ class PengajuanModel extends Model
             'id'
         );
     }
-
-
 }
-
-
