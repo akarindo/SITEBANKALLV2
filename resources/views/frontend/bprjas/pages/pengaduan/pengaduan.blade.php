@@ -352,7 +352,13 @@
                         style=" width: 80%; padding: 15px 7px; background-color: #1a29f1; color: #ffffff;font-size: 25px; border-radius: 30px;">
                         <i class="fas fa-edit mr-2"></i> Pengaduan Nasabah
                     </a>
+                </div>
 
+                <div class="col-lg-12 m-auto">
+                    <h5 class="mb-4">Sertifikat LPS</h5>
+
+                    <img src="{{ asset('frontend/bprjas/assets/pengaduan/bprjas.jpeg') }}" alt="Sertifikat LPS"
+                        class="img-fluid d-block mx-auto my-4" style="max-width: 800px; width: 100%;">
                 </div>
             </div>
 
