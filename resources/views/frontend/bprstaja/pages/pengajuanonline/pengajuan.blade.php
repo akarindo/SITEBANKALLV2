@@ -75,9 +75,9 @@
                                             style="width:70px;margin-bottom:15px;">
                                     </div>
                                 </div>
-                                <h5 style="margin-bottom:5px;">Kredit</h5>
+                                <h5 style="margin-bottom:5px;">Prmbiayaan</h5>
                                 <p style="font-size:15px;color:#555;">Klik disini untuk mengisi formulir <br> pengajuan
-                                    Kredit</p>
+                                    Pembiayaan</p>
                             </div>
                         </a>
                     </div>

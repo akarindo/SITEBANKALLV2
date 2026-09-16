@@ -45,7 +45,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <h2>Form Pengajuan Kredit</h2>
+                    <h2>Form Pengajuan Pembiayaan</h2>
                 </div>
 
             </div>
@@ -139,15 +139,15 @@
                     </div>
                 </div>
 
-                <h5 style="font-weight:700;color:#0a6e22;margin:25px 0 15px;">Data Pengajuan Kredit</h5>
+                <h5 style="font-weight:700;color:#0a6e22;margin:25px 0 15px;">Data Pengajuan Pembiayaan</h5>
 
                 <div class="row">
                     <div class="col-lg-6 mb-3">
-                        <label style="font-weight:600;margin-bottom:5px;">Jenis Kredit <span
+                        <label style="font-weight:600;margin-bottom:5px;">Jenis Pembiayaan <span
                                 style="color:red">*</span></label>
                         <select style="width:100%;border-radius:30px;padding:12px 18px;border:1px solid #ccc;" required
                             id="jns_kredit" name="jns_kredit">
-                            <option>-- Pilih Jenis Kredit --</option>
+                            <option>-- Pilih Jenis Pembiayaan --</option>
                             @foreach ($produkkredit as $row)
                                 <option value="{{ $row->id }}">
                                     {{ $row->title }}
@@ -157,7 +157,7 @@
                     </div>
 
                     <div class="col-lg-6 mb-3">
-                        <label style="font-weight:600;margin-bottom:5px;">Jumlah Kredit <span
+                        <label style="font-weight:600;margin-bottom:5px;">Jumlah Pembiayaan <span
                                 style="color:red">*</span></label>
                         <div style="position:relative;">
                             <span
@@ -184,7 +184,7 @@
                     </div>
 
                     <div class="col-lg-12 mb-3">
-                        <label style="font-weight:600;margin-bottom:5px;">Tujuan Kredit</label>
+                        <label style="font-weight:600;margin-bottom:5px;">Tujuan Pembiayaan</label>
                         <textarea rows="3" id="tujuan_kredit" name="tujuan_kredit"
                             style="width:100%;border-radius:20px;padding:12px 18px;border:1px solid #ccc;"></textarea>
                     </div>

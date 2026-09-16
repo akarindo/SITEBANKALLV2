@@ -97,7 +97,7 @@
                             class="nav-link dropdown-toggle {{ request()->is('kredit', 'deposito', 'tabungan') ? 'active' : '' }}"
                             data-toggle="dropdown">Produk</a>
                         <div class="dropdown-menu">
-                            <a href="/kredit" class="dropdown-item {{ request()->is('kredit') ? 'active' : '' }}">Kredit
+                            <a href="/kredit" class="dropdown-item {{ request()->is('kredit') ? 'active' : '' }}">Pembiayaan
                             </a>
                             <a href="/deposito"
                                 class="dropdown-item {{ request()->is('deposito') ? 'active' : '' }}">Deposito</a>

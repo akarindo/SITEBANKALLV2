@@ -68,6 +68,7 @@
                                         <li><a href="/pengurus">Pengurus</a></li>
                                         <li><a href="/organisasi">Struktur Organisasi</a></li>
                                         <li><a href="/galery">Gallery</a></li>
+                                        <li><a href="/dokumen">Dokumen</a></li>
                                     </ul>
                                 </li>
 
@@ -77,7 +78,6 @@
                                             <li><a href="/kredit">Kredit</a></li>
                                             <li><a href="/deposito">Deposito</a></li>
                                             <li><a href="/tabungan">Tabungan</a></li>
-
                                         </ul>
                                     </div>
                                 </li>

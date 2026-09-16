@@ -48,7 +48,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h2>Produk kredit</h2>
+                <h2>Produk Pembiayaan</h2>
             </div>
         </div>
     </div>

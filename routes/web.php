@@ -76,6 +76,8 @@ Route::prefix('salamprofit')->middleware(['admin'])->group(function () {
     Route::resource('wbs', WbsController::class);
     Route::get('/wbs/{id}/download', [WbsController::class, 'download'])->name('wbs.download');
     Route::resource('gallery', GalleryController::class);
+
+
     Route::resource('jaringan-kantor', JaringanKantorController::class);
     Route::resource('lelang', LelangController::class)->middleware('auth');
     Route::resource('profile', ProfileController::class);
@@ -195,6 +197,9 @@ Route::get('profile', [\App\Http\Controllers\frontend\ProfileController::class, 
 Route::get('corevalue', [\App\Http\Controllers\frontend\ProfileController::class, 'corevalue']);
 Route::resource('jaringankantor', Fe_JaringanKantorController::class);
 Route::resource('galery', \App\Http\Controllers\frontend\GalleryController::class);
+    Route::get('/dokumen', function () {
+        return view(env('GLOBAL_DOKUMEN'));
+    });
 Route::get('detgallery/{id}', [\App\Http\Controllers\frontend\GalleryController::class, 'detgallery'])->name('detgallery');
 Route::resource('lelang-jualaset', \App\Http\Controllers\frontend\LelangController::class);
 Route::get('detlelang/{id}', [\App\Http\Controllers\frontend\LelangController::class, 'detlelang'])->name('detlelang');
