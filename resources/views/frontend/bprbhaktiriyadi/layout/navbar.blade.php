@@ -118,7 +118,8 @@
                         <li><a href="/pengurus">Pengurus</a></li>
                         <li><a href="/organisasi">Struktur Organisasi</a></li>
                         <li><a href="/galery">Galery</a></li>
-
+                        <li><a href="#">Piagam Audit</a></li>
+                        <li><a href="#">Whistleblowing System</a></li>
                     </ul>
                 </li>
                 <li class="menu-item-has-children"><a href="#">Produk</a>

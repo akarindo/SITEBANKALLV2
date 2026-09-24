@@ -192,6 +192,7 @@
                                         value="3">
                                     <label class="form-check-label" for="kategori3">Layanan</label>
                                 </div>
+                                
                                 <div class="form-check mr-2 mt-2 sm:mt-0">
                                     <input id="kategori4" class="form-check-input" type="radio" name="kategori"
                                         value="4">
@@ -225,6 +226,7 @@
                         <input id="filBanner" accept="image/*" type="file" name="banner" class="form-control"
                             dat-showpreview="true">
                     </div>
+                 
                     <div class="col-span-12 sm:col-span-6">
                         <label for="filThumbnail" class="form-label">Thumbnail</label>
                         <input id="filThumbnail" accept="image/*" type="file" name="thumbnail" class="form-control"
@@ -240,6 +242,10 @@
                         <input id="filriplay" type="file" name="riplay" class="form-control" accept=".pdf,.doc,.docx" />
 
                     </div>
+                       <div class="col-span-12 sm:col-span-6">
+    <label for="txtUrutan" class="form-label">Urutan</label>
+    <input id="txtUrutan" name="urutan" type="number" min="0" class="form-control" value="0">
+</div>
                     <div class="col-span-12">
                         <hr>
                     </div>
@@ -269,10 +275,10 @@
         setavailableradio();
     });
     function openinputmodal(t) {
-
-    // reset form
+    // Reset Form
     $('#hdnId').val('');
     $('#txtTitle').val('');
+    $('#txtUrutan').val('0'); // Reset default urutan
     $('#txtType').val('0');
     $('#slcTag').val('');
     $('#filBanner').val('');
@@ -281,23 +287,32 @@
     $('#filriplay').val('');
     $('#deskripsi').val('');
     $('input[name="kategori"]').prop('checked', false);
-    document.querySelector('#slcTag').tomselect.setValue('');
-    quilldefaulteditor.setContents([]);
+    
+    if (document.querySelector('#slcTag').tomselect) {
+        document.querySelector('#slcTag').tomselect.setValue('');
+    }
+    
+    if (typeof quilldefaulteditor !== 'undefined') {
+        quilldefaulteditor.setContents([]);
+    }
 
-    // hapus preview lama
+    // Hapus preview lama
     $('.showpreviewfile').remove();
 
     if (t != null) {
         $('#hdnId').val(t.attr('dat-id'));
         $('#txtTitle').val(t.attr('dat-title'));
+        $('#txtUrutan').val(t.attr('dat-urutan') ?? 0); // Set nilai urutan saat edit
         $('#txtType').val(t.attr('dat-type'));
         $('#deskripsi').val(t.attr('dat-deskripsi'));
 
-        quilldefaulteditor.clipboard.dangerouslyPasteHTML(
-            t.attr('dat-content') ?? ''
-        );
+        if (typeof quilldefaulteditor !== 'undefined') {
+            quilldefaulteditor.clipboard.dangerouslyPasteHTML(
+                t.attr('dat-content') ?? ''
+            );
+        }
 
-        if (t.attr('dat-tag')) {
+        if (t.attr('dat-tag') && document.querySelector('#slcTag').tomselect) {
             document.querySelector('#slcTag').tomselect.setValue(
                 JSON.parse(t.attr('dat-tag'))
             );
@@ -305,7 +320,7 @@
 
         $('input[name="kategori"][value="' + t.attr('dat-kategori') + '"]').prop('checked', true);
 
-        // === PREVIEW FILE (AMAN) ===
+        // Preview File
         if (t.attr('dat-banner')) {
             $('#filBanner').parent().append(
                 `<img src="/recfil?rf=${t.attr('dat-banner')}" class="showpreviewfile mt-2" width="130">`
@@ -320,15 +335,13 @@
 
         if (t.attr('dat-brosur')) {
             $('#filbrosur').parent().append(
-                `<a href="/recfil?rf=${t.attr('dat-brosur')}" target="_blank"
-                 class="showpreviewfile block mt-2">📄 Lihat Brosur</a>`
+                `<a href="/recfil?rf=${t.attr('dat-brosur')}" target="_blank" class="showpreviewfile block mt-2">📄 Lihat Brosur</a>`
             );
         }
 
         if (t.attr('dat-riplay')) {
             $('#filriplay').parent().append(
-                `<a href="/recfil?rf=${t.attr('dat-riplay')}" target="_blank"
-                 class="showpreviewfile block mt-2">📎 Lihat Riplay</a>`
+                `<a href="/recfil?rf=${t.attr('dat-riplay')}" target="_blank" class="showpreviewfile block mt-2">📎 Lihat Riplay</a>`
             );
         }
     }
@@ -337,56 +350,53 @@
     inputmodal.show();
 }
 
-    function savedata() {
-        var id = $('#hdnId').val();
-        var titl = $('#txtTitle').val();
-        var type = $('#txtType').val();
-        var tags = $('#slcTag').val();
-        var ktgr = $('input[name="kategori"]:checked').val();
-        var banr = $('#filBanner').val();
-        var thmb = $('#filThumbnail').val();
-        var brsr = $('#filbrosur').val();
-        var rply = $('#filriplay').val();
-        var deskripsi = $('#deskripsi').val();
-        var cntn = quilldefaulteditor.getSemanticHTML();
+function savedata() {
+    var id = $('#hdnId').val();
+    var titl = $('#txtTitle').val();
+    var urutan = $('#txtUrutan').val(); // Ambil nilai urutan
+    var type = $('#txtType').val();
+    var tags = $('#slcTag').val();
+    var ktgr = $('input[name="kategori"]:checked').val();
+    var deskripsi = $('#deskripsi').val();
+    var cntn = quilldefaulteditor ? quilldefaulteditor.getSemanticHTML() : '';
 
-        var data = new FormData();
+    var data = new FormData();
 
-        data.append('id', id);
-        data.append('type', type);
-        data.append('tag', tags);
-        data.append('kategori', ktgr);
-        data.append('title', titl);
-        data.append('content', cntn);
-        data.append('deskripsi', deskripsi);
-        data.append('filebanner', $('#filBanner')[0].files[0]);
-        data.append('filethumbnail', $('#filThumbnail')[0].files[0]);
-        data.append('filbrosur', $('#filbrosur')[0].files[0]);
-        data.append('filriplay', $('#filriplay')[0].files[0]);
+    data.append('id', id);
+    data.append('title', titl);
+    data.append('urutan', urutan); // Kirim parameter urutan ke backend
+    data.append('type', type);
+    data.append('tag', tags);
+    data.append('kategori', ktgr);
+    data.append('content', cntn);
+    data.append('deskripsi', deskripsi);
+    
+    if ($('#filBanner')[0].files[0]) data.append('filebanner', $('#filBanner')[0].files[0]);
+    if ($('#filThumbnail')[0].files[0]) data.append('filethumbnail', $('#filThumbnail')[0].files[0]);
+    if ($('#filbrosur')[0].files[0]) data.append('filbrosur', $('#filbrosur')[0].files[0]);
+    if ($('#filriplay')[0].files[0]) data.append('filriplay', $('#filriplay')[0].files[0]);
 
-        $.ajax({
-            url: '/salamprofit/produklayanan',
-            data: data,
-            headers: {
-                'X-CSRF-Token': csrf_token 
-            },
-            cache: false,
-            contentType: false,
-            processData: false,
-            method: 'POST',
-            type: 'POST',
-            success: function(data){
-                // alert(data);
-                location.reload();
-            },
-            error: function(xhr){
-                if (xhr.status == 401) {
-                    alert(xhr.responseText);
-                }
+    $.ajax({
+        url: '/salamprofit/produklayanan',
+        data: data,
+        headers: {
+            'X-CSRF-Token': csrf_token 
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        success: function(data){
+            location.reload();
+        },
+        error: function(xhr){
+            if (xhr.status == 401) {
+                alert(xhr.responseText);
             }
-        });
-        
-    }
+        }
+    });
+}
 
     function deldata(id) {
         if (confirm('Hapus Data?')) {

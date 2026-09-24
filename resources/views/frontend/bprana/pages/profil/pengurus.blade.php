@@ -30,10 +30,10 @@
                 @if ($pengurus)
                 <article>
                     <div class="details-post-area">
-                        {{-- <div class="image" style="text-align:center;">
+                        <div class="image" style="text-align:center;">
                             <img src="/recfil?display=true&rf={{ $pengurus->banner }}" alt="{{ $pengurus->title }}"
                                 style="border-radius:8px; height: 800px; width: 900px;">
-                        </div> --}}
+                        </div>
                         <div class="space30"></div>
                         <div class="heading1">
                             <div class="event-content">

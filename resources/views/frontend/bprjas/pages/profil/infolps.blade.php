@@ -98,7 +98,7 @@
                 style="background:#1a22f7; color:#ffcc00; border:none; padding:10px 20px; border-radius:6px; font-weight:600; font-size:14px; margin-bottom:15px;">
                 TINGKAT BUNGA PENJAMINAN
             </button>
-            <h3 style="font-weight:600; margin-bottom:10px;">6,00%</h3>
+            <h3 style="font-weight:600; margin-bottom:10px;">6,25%</h3>
         </div>
     </div>
 </div>

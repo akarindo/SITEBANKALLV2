@@ -73,7 +73,7 @@
     <div class="row readContent">
       <div class="col-lg-12 mt-3 mb-3">
         <div class="row d-flex justify-content-center">
-          @foreach ($lainnya as $item)
+          @foreach ($piagamaudit as $item)
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100 text-center border-0">
               <img src="/recfil?display=true&rf={{ $item->thumbnail}}" class="card-img-top rounded-3"

@@ -67,9 +67,10 @@ class ProdukLayananController extends Controller
 
     public function tabungan()
     {
-        $data['tabungan'] = ProdukLayananModel::where('type', 0)
-            ->where('kategori', 2)
-            ->get();
+      $data['tabungan'] = ProdukLayananModel::where('type', 0)
+        ->where('kategori', 2)
+        ->orderBy('urutan', 'asc') // Urutkan berdasarkan kolom urutan
+        ->get();
 
         if (env('DATA_PAGE') === 'BPREMAS') {
             $data['deposito'] = ProdukLayananModel::where('type', 0)
