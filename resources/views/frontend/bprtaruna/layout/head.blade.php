@@ -8,7 +8,7 @@
      <link rel="shortcut icon" href="{{asset('frontend/bprtaruna/assets/img/logo/logo.png')}}" type="image/x-icon">
 
 
-     <!--=====CSS=======-->
+     <!--=====CSS=======--> 
      <link rel="stylesheet" href="{{asset('frontend/bprtaruna/assets/css/bootstrap.min.css')}}">
      <link rel="stylesheet" href="{{asset('frontend/bprtaruna/assets/css/fontawesome.css')}}">
      <link rel="stylesheet" href="{{asset('frontend/bprtaruna/assets/css/magnific-popup.css')}}">

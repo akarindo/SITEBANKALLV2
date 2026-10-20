@@ -478,6 +478,9 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <p class="text-white mt-2 small" style="font-size: 13px; opacity: 0.9;">
+                        *Tingkat bunga pinjaman ini berlaku mulai <strong>1 Oktober 2026</strong> sampai dengan <strong>31 Januari 2027</strong> (dapat berubah sewaktu-waktu sesuai ketentuan bank).
+                    </p>
                     </div>
                 </div>
             </div>

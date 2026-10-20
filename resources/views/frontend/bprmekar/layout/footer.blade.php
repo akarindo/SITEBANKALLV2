@@ -138,7 +138,7 @@
                                 <div class="details">
                                     <p style="color: #fff; font-weight: 700;">Email</p>
                                     <p style="margin:0;">
-                                        <a href="" class="info-box_link" style="color:#fff;">mekarnugraha@yahoo.com</a>
+                                        <a href="" class="info-box_link" style="color:#fff;">customercare@mekarnugraha.com</a>
                                     </p>
                                 </div>
                             </div>

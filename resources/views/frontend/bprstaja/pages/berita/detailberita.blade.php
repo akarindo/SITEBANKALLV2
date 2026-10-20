@@ -131,7 +131,7 @@
                                                 alt="{{ $item->title }}" />
                                         </div>
                                         <div class="post-text">
-                                            <a href="{{ route('detberita', $item->id) }}"
+                                            <a href="{{ route('detberita', $item->slug) }}"
                                                 class="text-truncate-2">{{ $item->title }}</a>
                                             <div class="post-meta">
                                                 <p>{{ \Carbon\Carbon::parse($item->tanggal_tampil)->format('d F Y') }}</p>

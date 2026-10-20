@@ -4,34 +4,41 @@
     <div class="top-header-area">
         <div class="container h-100">
             <div class="row h-100 align-items-center">
-                <div class="col-11 d-flex justify-content-between">
+                <div class="col-12 d-flex align-items-center justify-content-between top-header-content">
                     <!-- Logo Area -->
                     <div class="logo">
-                        <a href="/"><img src="{{ asset('frontend/bprdatagita/img/logo/logo.png') }}" alt=""
-                                width="170px;"></a>
-                    </div>
-
-                    <!-- Top Contact Info -->
-                    <div class="top-contact-info d-flex align-items-center">
-                        <a href="#" data-toggle="tooltip" data-placement="bottom"
-                            title="Jl. Raya Karehkel No.1 Leuwiliang, Kabupaten Bogor"><img
-                                src="{{ asset('frontend/bprdatagita/img/core-img/placeholder.png') }}" alt="">
-                            <span>Jl. Raya Karehkel No.1 Leuwiliang, Kabupaten Bogor</span></a>
-                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="bprdatagita@gmail.com"><img
-                                src="{{ asset('frontend/bprdatagita/img/core-img/message.png') }}" alt="">
-                            <span>bprdatagita@gmail.com</span></a>
-
-                    </div>
-                </div>
-                <div class="col-1 d-flex justify-content-between">@auth
-                    @if (auth()->user()->role == 1)
-                    <div class="account-icon" style="margin-left: 40px;" alt="Profile">
-                        <a href="/dashboarduser" style="font-size: 25px; color: #333;">
-                            <i class="fa-solid fa-user-tie"></i>
+                        <a href="/" aria-label="BPR Datagita Mustika">
+                            <img src="{{ asset('frontend/bprdatagita/img/logo/logo.png') }}"
+                                alt="BPR Datagita Mustika">
                         </a>
                     </div>
-                    @endif
-                    @endauth
+
+                    <div class="top-header-actions d-flex align-items-center">
+                        <!-- Top Contact Info -->
+                        <div class="top-contact-info d-flex align-items-center">
+                            <a href="#" data-toggle="tooltip" data-placement="bottom"
+                                title="Jl. Raya Karehkel No.1 Leuwiliang, Kabupaten Bogor">
+                                <img src="{{ asset('frontend/bprdatagita/img/core-img/placeholder.png') }}"
+                                    alt="">
+                                <span>Jl. Raya Karehkel No.1 Leuwiliang, Kabupaten Bogor</span>
+                            </a>
+                            <a href="#" data-toggle="tooltip" data-placement="bottom"
+                                title="bprdatagita@gmail.com">
+                                <img src="{{ asset('frontend/bprdatagita/img/core-img/message.png') }}" alt="">
+                                <span>bprdatagita@gmail.com</span>
+                            </a>
+                        </div>
+
+                        @auth
+                            @if (auth()->user()->role == 1)
+                                <div class="account-icon">
+                                    <a href="/dashboarduser" aria-label="Profil pengguna">
+                                        <i class="fa-solid fa-user-tie"></i>
+                                    </a>
+                                </div>
+                            @endif
+                        @endauth
+                    </div>
                 </div>
 
             </div>
@@ -43,7 +50,7 @@
         <div class="classy-nav-container breakpoint-off">
             <div class="container">
                 <!-- Menu -->
-                <nav class="classy-navbar justify-content-between" id="creditNav">
+                <nav class="classy-navbar justify-content-between" id="creditNav" aria-label="Navigasi utama">
 
                     <!-- Navbar Toggler -->
                     <div class="classy-navbar-toggler">
@@ -107,6 +114,7 @@
                                     </div>
                                 </li>
                                 <li><a href="/pengajuanonline">Pengajuan Online</a></li>
+                                <li><a href="/pengaduan">Pengaduan</a></li>
                                 {{-- <li><a href="contact.html">Contact</a></li> --}}
                             </ul>
                         </div>
@@ -116,7 +124,8 @@
                     <!-- Contact -->
                     <div class="contact">
                         <a href="tel:+6281314791447">
-                            <img src="frontend/bprdatagita/img/core-img/call2.png" alt=""> +6281314791447
+                            <img src="{{ asset('frontend/bprdatagita/img/core-img/call2.png') }}"
+                                alt=""> +6281314791447
                         </a>
                     </div>
                 </nav>

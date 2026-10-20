@@ -704,7 +704,7 @@
                                 <div class="blog-item">
 
                                     <div class="blog-img">
-                                        <a href="{{ route('detberita', $item->id) }}">
+                                        <a href="{{ route('detberita', $item->slug) }}">
                                             <img src="/recfil?display=true&rf={{ $item->thumbnail }}"
                                                 alt="{{ $item->title }}"
                                                 style="width:100%; height:220px; object-fit:fill;">

@@ -333,6 +333,10 @@
                     Kami menyediakan sarana bagi masyarakat untuk menyampaikan pengaduan dan pelanggaran yang terjadi di
                     lingkungan sekitar secara cepat dan mudah.
                 </p>
+                <p style="color: black; font-size: 23px;">
+                 Dalam rangka menjaga integritas BPR Juwana Artha Sentosa, kami berkomitmen menjalankan pelayanan yang bersih, jujur, dan transparan. Kami sampaikan bahwa BPR Juwana Artha Sentosa tidak menerima GRATIFIKASI dalam bentuk apa pun.
+Jika terdapat oknum yang meminta imbalan/gratifikasi dengan mengatasnamakan BPR Juwana Artha Sentosa, dapat dilaporkan melalui Whistleblowing System BPR Juwana Artha Sentosa
+                </p>
             </div>
             </div>
             <!-- TEKS + IKON ARAH -->
@@ -354,12 +358,15 @@
                     </a>
                 </div>
 
-                <div class="col-lg-12 m-auto">
-                    <h5 class="mb-4">Sertifikat LPS</h5>
+               <div class="col-lg-12 m-auto text-center">
+    <h5 class="mb-4">Sertifikat LPS</h5>
 
-                    <img src="{{ asset('frontend/bprjas/assets/pengaduan/bprjas.jpeg') }}" alt="Sertifikat LPS"
-                        class="img-fluid d-block mx-auto my-4" style="max-width: 800px; width: 100%;">
-                </div>
+    <a href="{{ asset('frontend/bprjas/assets/pengaduan/sertifikat-lps.pdf') }}" 
+       class="btn btn-primary btn-lg my-4" 
+       download>
+        <i class="fas fa-file-pdf mr-2"></i> Download Sertifikat LPS (PDF)
+    </a>
+</div>
             </div>
 
 
