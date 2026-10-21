@@ -266,6 +266,19 @@
         letter-spacing: 0.5em;
         font-family: monospace;
     }
+
+    .pengaduan-pdf {
+        width: 100%;
+        height: 720px;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+        .pengaduan-pdf {
+            height: 520px;
+        }
+    }
 </style>
 
 <section class="breadcrumb-area bg-img bg-overlay jarallax"
@@ -296,19 +309,377 @@
 
 
     <!--===== LAYANAN PENGADUAN =====-->
-    <section class="py-5 text-center">
+    <section id="pengaduan-nasabah" class="py-5 text-center pn-section" aria-labelledby="pn-title">
+        <style>
+            #pengaduan-nasabah {
+                --pn-primary: #124b70;
+                --pn-accent: #0c83a0;
+                --pn-text: #243443;
+                --pn-muted: #607184;
+                --pn-border: #e3ebf0;
+                --pn-soft: #f3f8fb;
+                font-family: inherit;
+                color: var(--pn-text);
+                line-height: 1.75;
+                padding: 48px 20px 72px;
+                background: #fff;
+            }
+
+            #pengaduan-nasabah *,
+            #pengaduan-nasabah *::before,
+            #pengaduan-nasabah *::after {
+                box-sizing: border-box;
+            }
+
+            #pengaduan-nasabah .pn-container {
+                max-width: 1100px;
+                margin: 0 auto;
+            }
+
+            #pengaduan-nasabah .pn-heading {
+                margin: 0 0 14px;
+                color: var(--pn-primary);
+                font-size: clamp(26px, 3vw, 38px);
+                line-height: 1.25;
+                font-weight: 750;
+            }
+
+            #pengaduan-nasabah .pn-lead {
+                max-width: 900px;
+                color: var(--pn-muted);
+                font-size: 16px;
+                margin: 0 0 28px;
+            }
+
+            #pengaduan-nasabah .pn-eyebrow {
+                display: inline-block;
+                color: var(--pn-accent);
+                font-weight: 700;
+                font-size: 12px;
+                letter-spacing: .09em;
+                text-transform: uppercase;
+                margin: 0 0 9px;
+            }
+
+            #pengaduan-nasabah .pn-card {
+                border: 1px solid var(--pn-border);
+                border-radius: 16px;
+                padding: 26px;
+                margin: 0 0 22px;
+                background: #fff;
+                box-shadow: 0 7px 25px rgba(20, 56, 81, .045);
+            }
+
+            #pengaduan-nasabah .pn-card h3 {
+                margin: 0 0 12px;
+                color: var(--pn-primary);
+                font-size: 21px;
+                line-height: 1.35;
+            }
+
+            #pengaduan-nasabah .pn-section-title {
+                color: var(--pn-primary);
+                font-size: 25px;
+                line-height: 1.35;
+                margin: 34px 0 18px;
+            }
+
+            #pengaduan-nasabah p {
+                margin: 0 0 14px;
+            }
+
+            #pengaduan-nasabah p:last-child {
+                margin-bottom: 0;
+            }
+
+            #pengaduan-nasabah ul,
+            #pengaduan-nasabah ol {
+                padding-left: 22px;
+                margin: 12px 0 0;
+            }
+
+            #pengaduan-nasabah li {
+                margin: 0 0 10px;
+                padding-left: 3px;
+            }
+
+            #pengaduan-nasabah li:last-child {
+                margin-bottom: 0;
+            }
+
+            #pengaduan-nasabah a {
+                color: var(--pn-primary);
+                text-decoration: underline;
+                text-underline-offset: 3px;
+                overflow-wrap: anywhere;
+            }
+
+            #pengaduan-nasabah a:hover {
+                color: var(--pn-accent);
+            }
+
+            #pengaduan-nasabah .pn-grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 20px;
+            }
+
+            #pengaduan-nasabah .pn-grid .pn-card {
+                height: 100%;
+                margin: 0;
+            }
+
+            #pengaduan-nasabah .pn-note {
+                background: var(--pn-soft);
+                border-left: 4px solid var(--pn-accent);
+                border-radius: 8px;
+                padding: 16px 20px;
+                margin-top: 20px;
+            }
+
+            #pengaduan-nasabah .pn-note p {
+                margin: 0;
+            }
+
+            #pengaduan-nasabah .pn-time {
+                color: var(--pn-primary);
+                font-weight: 750;
+                font-size: 18px;
+            }
+
+            #pengaduan-nasabah .pn-steps {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 14px;
+                margin: 15px 0;
+                list-style: none;
+                padding: 0;
+                counter-reset: pn-step;
+            }
+
+            #pengaduan-nasabah .pn-steps li {
+                counter-increment: pn-step;
+                position: relative;
+                margin: 0;
+                padding: 18px 18px 18px 60px;
+                background: var(--pn-soft);
+                border: 1px solid var(--pn-border);
+                border-radius: 12px;
+            }
+
+            #pengaduan-nasabah .pn-steps li::before {
+                content: counter(pn-step);
+                position: absolute;
+                top: 18px;
+                left: 16px;
+                width: 31px;
+                height: 31px;
+                border-radius: 50%;
+                background: var(--pn-primary);
+                color: #fff;
+                font-weight: 700;
+                display: grid;
+                place-items: center;
+            }
+
+            #pengaduan-nasabah .pn-contact {
+                margin: 20px 0 0;
+                padding: 20px 24px;
+                border-radius: 14px;
+                background: var(--pn-soft);
+            }
+
+            #pengaduan-nasabah .pn-contact p {
+                margin-bottom: 8px;
+            }
+
+            #pengaduan-nasabah .pn-small {
+                font-size: 14px;
+                color: var(--pn-muted);
+            }
+
+            @media(max-width:720px) {
+                #pengaduan-nasabah {
+                    padding: 32px 16px 48px;
+                }
+
+                #pengaduan-nasabah .pn-grid,
+                #pengaduan-nasabah .pn-steps {
+                    grid-template-columns: 1fr;
+                }
+
+                #pengaduan-nasabah .pn-card {
+                    padding: 20px;
+                }
+
+                #pengaduan-nasabah .pn-section-title {
+                    font-size: 22px;
+                }
+            }
+        </style>
+
+        <div class="pn-container">
+            <header>
+                <span class="pn-eyebrow">Layanan Konsumen</span>
+                <h2 id="pn-title" class="pn-heading">Prosedur Pengaduan Nasabah</h2>
+                <p class="pn-lead">PT. BPR Datagita Mustika menyediakan layanan penerimaan, penanganan, dan penyelesaian
+                    pengaduan nasabah sesuai dengan ketentuan perlindungan konsumen di sektor jasa keuangan.</p>
+                <p>Berdasarkan Peraturan Otoritas Jasa Keuangan Nomor 22 Tahun 2023 tentang Perlindungan Konsumen dan
+                    Masyarakat di Sektor Jasa Keuangan serta POJK No. 18/POJK.07/2018 tentang Layanan Pengaduan Konsumen
+                    di Sektor Jasa Keuangan, berikut tata cara pelayanan dan penyelesaian pengaduan nasabah PT. BPR
+                    Datagita Mustika.</p>
+            </header>
+
+            <h3 class="pn-section-title">Mekanisme Pengajuan Pengaduan</h3>
+            <p>Pengaduan dapat disampaikan oleh nasabah secara langsung atau oleh perwakilan nasabah yang bertindak
+                untuk dan atas nama nasabah, dengan menunjukkan surat kuasa bermeterai. Pengaduan dapat disampaikan
+                secara lisan atau tertulis.</p>
+
+            <div class="pn-grid">
+                <article class="pn-card">
+                    <h3>A. Pengaduan Secara Lisan</h3>
+                    <p>Nasabah dapat menyampaikan pengaduan melalui:</p>
+                    <ol>
+                        <li>Telepon: <a href="tel:+622518647375">(0251) 8647375</a>.</li>
+                        <li>WhatsApp: <a href="https://wa.me/6281314791447" target="_blank"
+                                rel="noopener noreferrer">0813 1479 1447</a>.</li>
+                    </ol>
+                    <div class="pn-note">
+                        <p><span class="pn-time">Maksimal 5 hari kerja</span><br>Pengaduan lisan ditangani dan
+                            diselesaikan paling lama 5 hari kerja sejak tanggal diterima. Apabila membutuhkan waktu
+                            lebih lama, Bank akan meminta nasabah menyampaikan pengaduan secara tertulis.</p>
+                    </div>
+                </article>
+
+                <article class="pn-card">
+                    <h3>B. Pengaduan Secara Tertulis</h3>
+                    <p>Pengaduan tertulis dapat diajukan melalui:</p>
+                    <ol>
+                        <li>Datang ke kantor dan menyampaikan pengaduan kepada Customer Service atau petugas pelayanan
+                            nasabah.</li>
+                        <li>Email <a href="mailto:bprdatagita@gmail.com?subject=PENGADUAN">bprdatagita@gmail.com</a>
+                            dengan subjek <strong>PENGADUAN</strong>.</li>
+                        <li>WhatsApp resmi: <a href="https://wa.me/6281314791447" target="_blank"
+                                rel="noopener noreferrer">0813 1479 1447</a>.</li>
+                        <li>Formulir pada menu Pengaduan Nasabah di <a href="https://bprdatagitamustika.co.id"
+                                target="_blank" rel="noopener noreferrer">bprdatagitamustika.co.id</a>.</li>
+                        <li>Surat resmi ke PT. BPR Datagita Mustika Utama, Jl. Karehkel No. 1, Leuwiliang, Kode Pos
+                            16640.</li>
+                    </ol>
+                </article>
+            </div>
+
+            <article class="pn-card" style="margin-top:22px;">
+                <h3>Dokumen Pendukung Pengaduan Tertulis</h3>
+                <p>Untuk pengaduan tertulis, nasabah wajib melampirkan fotokopi identitas dan dokumen pendukung yang
+                    relevan, antara lain:</p>
+                <ol>
+                    <li>Fotokopi KTP nasabah dan/atau perwakilannya, apabila diwakilkan.</li>
+                    <li>Surat kuasa dari nasabah, apabila pengaduan diwakilkan.</li>
+                    <li>Fotokopi rekening yang diadukan.</li>
+                    <li>Fotokopi bukti transaksi keuangan terkait permasalahan.</li>
+                    <li>Fotokopi dokumen pendukung lainnya yang terkait permasalahan.</li>
+                </ol>
+                <div class="pn-note">
+                    <p><span class="pn-time">10 hari kerja + perpanjangan maksimal 10 hari kerja</span><br>Pengaduan
+                        tertulis ditangani dan diselesaikan dalam 10 hari kerja sejak diterima oleh Bank. Dalam kondisi
+                        tertentu sesuai ketentuan hukum, waktu penyelesaian dapat diperpanjang paling lama 10 hari kerja
+                        berikutnya. Bank akan memberitahukan perpanjangan tersebut secara tertulis kepada nasabah
+                        sebelum jangka waktu awal berakhir.</p>
+                </div>
+            </article>
+
+            <h3 class="pn-section-title">C. Alur Penanganan dan Penyelesaian Pengaduan</h3>
+            <p>Pengaduan mengenai produk dan/atau layanan disampaikan oleh nasabah atau perwakilannya, baik secara lisan
+                maupun tertulis, melalui tahapan berikut:</p>
+            <ol class="pn-steps">
+                <li><strong>Penyampaian pengaduan.</strong> Nasabah atau perwakilannya menyampaikan keluhan terkait
+                    produk dan/atau layanan Bank.</li>
+                <li><strong>Penerimaan dan verifikasi.</strong> PT. BPR Datagita Mustika menerima pengaduan,
+                    memverifikasi data nasabah, dan membuat nomor pengaduan.</li>
+                <li><strong>Nomor pengaduan.</strong> Nasabah menerima nomor pengaduan sebagai referensi proses
+                    penanganan.</li>
+                <li><strong>Tindak lanjut.</strong> Bank menindaklanjuti pengaduan sesuai dengan batas waktu
+                    penyelesaian berdasarkan jenis pengaduan.</li>
+                <li><strong>Penyampaian hasil.</strong> Bank menyampaikan hasil penyelesaian pengaduan kepada nasabah.
+                </li>
+                <li><strong>Konfirmasi penyelesaian.</strong> Apabila nasabah menyetujui hasil penyelesaian, pengaduan
+                    dianggap selesai dan Bank menyampaikan informasi penyelesaiannya.</li>
+            </ol>
+            <p>Berdasarkan SE OJK No. 17/SEOJK.07/2018, informasi mengenai jangka waktu penyelesaian pengaduan
+                disampaikan melalui telepon, surat, dan/atau email.</p>
+
+            <article class="pn-card">
+                <h3>Apabila Nasabah Tidak Menyetujui Hasil Penyelesaian</h3>
+                <p>Apabila nasabah tidak sepakat atau tidak puas terhadap hasil penyelesaian pengaduan dari Bank,
+                    nasabah dapat melanjutkan upaya penyelesaian melalui:</p>
+                <ul>
+                    <li><strong>Otoritas Jasa Keuangan (OJK)</strong> melalui fasilitas penyelesaian pengaduan.</li>
+                    <li><strong>Bank Indonesia (BI)</strong> khusus untuk pengaduan yang berkaitan dengan jasa sistem
+                        pembayaran.</li>
+                    <li><strong>Lembaga Alternatif Penyelesaian Sengketa (LAPS)</strong> yang tercantum dalam daftar
+                        lembaga yang ditetapkan oleh OJK.</li>
+                    <li><strong>Jalur hukum</strong> sesuai dengan ketentuan yang berlaku.</li>
+                </ul>
+            </article>
+
+            <h3 class="pn-section-title">Kerahasiaan Data Nasabah</h3>
+            <article class="pn-card">
+                <p>Bank menjaga kerahasiaan data nasabah yang mengajukan pengaduan terhadap pihak mana pun, kecuali:</p>
+                <ol>
+                    <li>Kepada Otoritas Jasa Keuangan.</li>
+                    <li>Dalam rangka penyelesaian pengaduan.</li>
+                    <li>Apabila diwajibkan oleh peraturan perundang-undangan.</li>
+                    <li>Atas persetujuan nasabah yang bersangkutan.</li>
+                </ol>
+            </article>
+
+            <h3 class="pn-section-title">Hal yang Perlu Diperhatikan Nasabah</h3>
+            <article class="pn-card">
+                <p>Untuk mendukung kelancaran proses penanganan pengaduan, nasabah diimbau untuk:</p>
+                <ol>
+                    <li>Menentukan inti permasalahan yang akan diadukan.</li>
+                    <li>Menyiapkan dokumen pendukung terkait permasalahan yang diadukan.</li>
+                    <li>Menyimpan dokumen asli dengan baik dan menyampaikan salinan dokumen kepada Bank.</li>
+                    <li>Mencatat nomor register pengaduan dan nama petugas penerima pengaduan.</li>
+                    <li>Menyimpan dokumen surat-menyurat, termasuk surat hasil penyelesaian pengaduan.</li>
+                </ol>
+            </article>
+
+            <!-- <aside class="pn-contact" aria-label="Kontak pengaduan">
+      <h3 style="margin:0 0 12px;color:var(--pn-primary);">Hubungi Layanan Pengaduan</h3>
+      <p><strong>Telepon:</strong> <a href="tel:+622518647375">(0251) 8647375</a></p>
+      <p><strong>WhatsApp:</strong> <a href="https://wa.me/6281314791447" target="_blank" rel="noopener noreferrer">0813 1479 1447</a></p>
+      <p><strong>Email:</strong> <a href="mailto:bprdatagita@gmail.com?subject=PENGADUAN">bprdatagita@gmail.com</a></p>
+      <p><strong>Website:</strong> <a href="https://bprdatagitamustika.co.id" target="_blank" rel="noopener noreferrer">bprdatagitamustika.co.id</a></p>
+      <p><strong>Alamat surat:</strong> PT. BPR Datagita Mustika Utama, Jl. Karehkel No. 1, Leuwiliang, 16640.</p>
+    </aside> -->
+        </div>
+    </section>
+    <section class="py-5 text-center" hidden>
 
         {{-- <h2 style="font-weight:600; color:#b80000; margin-bottom:20px; font-family:'Open Sans', sans-serif;"">
                 Pengaduan Nasabah
             </h2> --}}
 
             <div class=" row justify-content-center mb-4" style="margin-top: 40px;">
-            <div class="col-lg-8">
+            <div class="col-lg-8" hidden>
                 <p style="color: black; font-size: 23px;">
                     Kami menyediakan sarana bagi masyarakat untuk menyampaikan pengaduan dan pelanggaran yang terjadi di
                     lingkungan sekitar secara cepat dan mudah.
                 </p>
             </div>
+            </div>
+
+            <div class="row justify-content-center mb-4">
+                <div class="col-lg-8">
+                    <iframe class="pengaduan-pdf" src="{{ asset('frontend/bprdatagita/prosedur_pengaduan.pdf') }}"
+                        title="Prosedur Pengaduan Nasabah">
+                        <p>PDF tidak dapat ditampilkan. <a
+                                href="{{ asset('frontend/bprdatagita/prosedur_pengaduan.pdf') }}" target="_blank"
+                                rel="noopener">Buka PDF Prosedur Pengaduan</a>.</p>
+                    </iframe>
+                </div>
             </div>
             <!-- TEKS + IKON ARAH -->
             <div class="row justify-content-center mb-3" style="margin-top: 50px">
@@ -658,7 +1029,7 @@
                                         <div class="col-md-6 mb-3">
                                             <label for="namaxx_2" class="form-label fw-semibold">Nama BPR</label>
                                             <input type="text" name="namaxx" id="namaxx_2" class="form-control"
-                                                value="{{ config('subdomain.APP_NAME') }}" readonly>
+                                                value="{{ ENV('APP_NAME') }}" readonly>
                                         </div>
                                         <!-- name="lokasixx" -->
                                         <div class="col-md-6 mb-3">
