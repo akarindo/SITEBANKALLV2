@@ -95,176 +95,113 @@
         opacity: 1;
     }
 
-    file-list {
-        margin-top: 10px;
-        padding-left: 0;
+    /* Custom Styling untuk Prosedur Pengaduan & Kerahasiaan */
+    .prosedur-card {
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        text-align: left;
     }
 
-    /* setiap item file */
-    .file-list li {
-        list-style: none;
-        background: #f4f6f9;
-        margin-bottom: 6px;
-        padding: 8px 12px;
-        border-radius: 6px;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        border: 1px solid #e2e6ea;
+    .prosedur-card h3 {
+        color: #b80000;
+        font-weight: 700;
+        margin-bottom: 15px;
     }
 
-    /* icon */
-    .file-list li::before {
-        content: "•";
-        font-size: 20px;
-    }
-
-    /* Running text animation */
-    @keyframes marquee {
-        0% {
-            transform: translateX(0);
-        }
-
-        100% {
-            transform: translateX(-100%);
-        }
-    }
-
-    /* Responsive Banner */
-    .banner-img {
-        width: 100%;
-        height: 500px;
-        object-fit: fill;
-        display: block;
-    }
-
-    @media(max-width:768px) {
-        .banner-img {
-            height: 260px;
-            object-fit: cover;
-        }
-    }
-
-    /* css untuk form login */
-    .bg-gradient-primary {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    }
-
-    .modal-content {
-        border-radius: 15px;
-        overflow: hidden;
-    }
-
-    .form-control:focus {
-        border-color: #6a11cb;
-        box-shadow: 0 0 0 0.25rem rgba(106, 17, 203, 0.25);
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        border: none;
-    }
-
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #5a0dbb 0%, #1575ec 100%);
-        transform: translateY(-2px);
-        transition: all 0.3s ease;
-    }
-
-    .btn-success {
-        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-        border: none;
-    }
-
-    .btn-success:hover {
-        background: linear-gradient(135deg, #0a8b7e 0%, #28de6d 100%);
-        transform: translateY(-2px);
-        transition: all 0.3s ease;
-    }
-
-    .step-indicator {
-        display: flex;
-        justify-content: space-between;
-        position: relative;
-        margin-bottom: 30px;
-    }
-
-    .step {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-        z-index: 1;
-        width: 33.33%;
-    }
-
-    .step-number {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: #e9ecef;
-        color: #6c757d;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        margin-bottom: 8px;
-        transition: all 0.3s ease;
-    }
-
-    .step.active .step-number {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: white;
-        box-shadow: 0 4px 8px rgba(106, 17, 203, 0.3);
-    }
-
-    .step-label {
-        font-size: 0.8rem;
-        text-align: center;
-        color: #6c757d;
-    }
-
-    .step.active .step-label {
-        color: #495057;
+    .prosedur-card h4 {
+        color: #333333;
         font-weight: 600;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
     }
 
-    .step-line {
-        position: absolute;
-        top: 20px;
-        left: 50%;
-        width: 100%;
-        height: 2px;
-        background-color: #e9ecef;
-        z-index: -1;
+    .prosedur-card p, .prosedur-card li {
+        color: #4a4a4a;
+        font-size: 15px;
+        line-height: 1.6;
+        text-align: justify;
     }
 
-    .step:last-child .step-line {
-        display: none;
+    .prosedur-columns {
+        margin-top: 1.5rem;
+        margin-right: 0;
+        margin-left: 0;
     }
 
-    .form-control {
-        transition: all 0.3s ease;
+    .prosedur-section-wide {
+        margin-top: 2rem;
     }
 
-    .form-control:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    .prosedur-column {
+        padding: 0;
     }
 
-    .btn {
-        transition: all 0.3s ease;
+    .prosedur-column:first-child {
+        padding-right: 1.5rem;
     }
 
-    .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .prosedur-column + .prosedur-column {
+        padding-left: 1.5rem;
+        border-left: 1px solid #e2e6ea;
     }
 
-    #otp_code {
-        letter-spacing: 0.5em;
-        font-family: monospace;
+    .prosedur-card ul,
+    .prosedur-card ol {
+        margin-top: 0;
+        margin-bottom: 1.25rem;
+        padding-left: 1.75rem;
+        list-style-position: outside;
+    }
+
+    .prosedur-card ul {
+        list-style-type: disc;
+    }
+
+    .prosedur-card ol {
+        list-style: decimal outside !important;
+    }
+
+    .prosedur-card ul > li {
+        list-style: disc outside !important;
+    }
+
+    .prosedur-card ol > li {
+        list-style: decimal outside !important;
+    }
+
+    .prosedur-card ol > li::marker {
+        color: #b80000;
+        font-weight: 700;
+    }
+
+    .prosedur-card li {
+        margin-bottom: 0.5rem;
+        padding-left: 0.25rem;
+    }
+
+    .prosedur-card li:last-child {
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 991.98px) {
+        .prosedur-column {
+            padding: 0;
+        }
+
+        .prosedur-column:first-child {
+            padding-right: 0;
+        }
+
+        .prosedur-column + .prosedur-column {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            padding-left: 0;
+            border-top: 1px solid #e2e6ea;
+            border-left: 0;
+        }
     }
 
     .pengaduan-pdf {
@@ -282,7 +219,7 @@
 </style>
 
 <section class="breadcrumb-area bg-img bg-overlay jarallax"
-    style="background-image: url(frontend/bprdatagita/img/profil/top.jpg);">
+    style="background-image: url('frontend/bprdatagita/img/profil/top.jpg');">
     <div class="container h-100">
         <div class="row h-100 align-items-center">
             <div class="col-12">
@@ -299,16 +236,10 @@
         </div>
     </div>
 </section>
-{{-- <div style="width:100%; overflow:hidden; margin-top:100px;">
-    <img src="{{ asset('frontend/bprtaruna/assets/img/profil/pengaduan.jpg') }}" alt="Banner"
-        style=" width:100%; height: auto; max-height:auto; object-fit:cover; display:block;">
-</div> --}}
-
 
 <body class="body tg-heading-subheading animation-style3">
-
-
     <!--===== LAYANAN PENGADUAN =====-->
+<<<<<<< HEAD
     <section id="pengaduan-nasabah" class="py-5 text-center pn-section" aria-labelledby="pn-title">
         <style>
             #pengaduan-nasabah {
@@ -668,8 +599,198 @@
                     Kami menyediakan sarana bagi masyarakat untuk menyampaikan pengaduan dan pelanggaran yang terjadi di
                     lingkungan sekitar secara cepat dan mudah.
                 </p>
+=======
+    <section class="py-5 text-center">
+        <div class="container">
+            <!-- 5 Baris Deskripsi Pertama -->
+            <div class="row justify-content-center mb-4" style="margin-top: 20px;">
+                <div class="col-12">
+                    <p style="color: #333; font-size: 18px; line-height: 1.8; text-align: justify;">
+                        Kami menyediakan sarana bagi masyarakat untuk menyampaikan pengaduan dan pelanggaran yang terjadi di lingkungan sekitar secara cepat dan mudah.
+                    </p>
+                    <p style="color: #333; font-size: 18px; line-height: 1.8; text-align: justify;">
+                        Berdasarkan Peraturan Otoritas Jasa Keuangan Nomor 22 Tahun 2023 tentang Perlindungan
+Konsumen dan Masyarakat di Sektor Jasa Keuangan dan POJK No. 18/POJK.07/2018 tentang
+Layanan Pengaduan Konsumen di Sektor Jasa Keuangan, dengan ini menginformasikan Tata
+Cara Pelayanan dan Penyelesaian Pengaduan Nasabah PT. BPR DATAGITA MUSTIKA.
+                    </p>
+                </div>
+>>>>>>> a79f53c (add tab jual aset and lelang bprsms)
             </div>
+
+            <!-- Konten Hard Code HTML Prosedur & Mekanisme Pengaduan -->
+            <div class="row justify-content-center mb-5">
+                <div class="col-12">
+                    <div class="prosedur-card">
+
+                        <!-- Judul Pertama -->
+                        <h3 class="border-bottom pb-3 mb-4">Mekanisme Pengajuan Pengaduan</h3>
+                        <p class="mb-4">
+                           Pengajuan pengaduan nasabah kepada BPR Datagita Mustika dapat dilakukan oleh nasabah
+atau perwakilan nasabah yang bertindak untuk dan atas nama nasabah (ditunjukkan dengan
+surat kuasa bermaterai). Nasabah dapat menyampaikan pengaduan kepada BPR Datagita
+Mustika melalui 2 (dua) cara sebagai berikut :
+
+                        </p>
+
+                        <!-- Poin A: Pengaduan Secara Lisan -->
+                        <div class="prosedur-section">
+                            <h4>A. Pengaduan Secara Lisan</h4>
+                           
+                            <ol class="mb-4">
+                                <li>Nasabah menelpon dan menyampaikan pengaduannya melalui no telp (0251)8647375</i>.</li>
+                                <li>Nasabah menyampaikan pengaduan dengan mengirim Whatsapp ke nomor 08131479
+1447
+.</li>
+                            </ol>
+                            <p>Pengaduan secara lisan dari nasabah akan ditangani dan diselesaikan maksimal dalam 5 (lima)
+hari kerja setelah tanggal pengaduan diterima. Apabila pengaduan yang diajukan oleh
+nasabah memerlukan penanganan dan penyelesaian lebih dari 5 (lima) hari kerja, maka BPR
+Datagita Mustika akan menyampaikan kepada nasabah agar mengajukan pengaduannya
+secara tertulis.</p>
+                        </div>
+
+                        <!-- Poin B: Pengaduan Secara Tertulis -->
+                        <div class="prosedur-section prosedur-section-wide">
+                            <h4>B. Pengaduan Secara Tertulis</h4>
+                            <p>Pengaduan secara tertulis dapat disampaikan melalui beberapa media diantaranya :
+</p>
+                            <ol class="mb-4">
+                                <li> Nasabah mendatangi kantor dan menyampaikan pengaduan melalui Customer service/
+Petugas pelayanan nasabah.</li>
+                                <li>Mengirim email ke alamat: bprdatagita@gmail.com dengan subjek “PENGADUAN”</li>
+                                <li>Mengirim pesan melalui whatsapp resmi PT. BPR Datagita Mustika di nomor:
+081314791447</li>
+                                <li>Mengisi formulir pengaduan melalui menu Pengaduan Nasabah pada website
+bprdatagitamustika.co.id</li>
+                                <li>Bersurat resmi ke PT. BPR Datagita Mustika Utama Jl. Karehkel No.1 Leuwiliang Kode Pos
+16640.</li>
+                            </ol>
+
+                            <p>Dalam hal pengaduan diajukan secara tertulis, maka nasabah wajib melampirkan fotokopi
+identitas dan dokumen pendukung lainnya seperti :
+</p>
+                            <ol>
+                                <li>Foto copy KTP nasabah dan/atau perwakilannya (jika diwakilkan)</li>
+                                <li>Surat kuasa dari nasabah yang diwakilkan (jika diwakilkan)</li>
+                                <li>Foto copy rekening yang diadukan</li>
+                                <li>Foto copy bukti transaksi keuangan yang terkait permasalahan</li>
+                                <li>Foto copy dokumen pendukung lainnya yang terkait permasalahan</li>
+                            </ol>
+
+                            <p>Pengaduan secara tertulis akan ditangani dan diselesaikan dalam 10 (sepuluh) hari kerja
+setelah tanggal penerimaan pengaduan diterima oleh Bank dan dapat diperpanjang sampai
+dengan paling lama 10 (sepuluh) hari kerja berikutnya apabila Bank memerlukan
+perpanjangan waktu untuk penyelesaian pengaduan nasabah yang disebabkan oleh kondisi
+tertentu dengan memperhatikan ketentuan hukum yang berlaku. Dalam hal ini Bank akan
+memberitahukan secara tertulis kepada nasabah sebelum jangka waktu berakhir.</p>
+<p>Bank akan menjaga kerahasiaan data nasabah yang melakukan pengaduan kepada Bank
+terhadap pihak manapun, kecuali :</p>
+                            <ol>
+                                <li>Kepada pihak Otoritas Jasa Keuangan;</li>
+                                <li>Dalam rangka penyelesaian pengaduan;</li>
+                                <li>Diwajibkan oleh peraturan perundang-undangan dan/atau;</li>
+                                <li>Atas persetujuan nasabah yang bersangkutan.</li>
+                            </ol>
+
+                            <p>Demi kelancaran proses pengaduan dan penanganan pengaduan maka nasabah perlu
+memperhatikan hal-hal berikut :</p>
+                            <ol>
+                                <li>Tentukan inti permasalahan yang akan diadukan.</li>
+                                <li>Siapkan dokumen pendukung yang terkait permasalahan yang akan diadukan.</li>
+                                <li>Simpan dengan baik dokumen-dokumen asli yang dimiliki dan sampaikan kepada bank
+salinan/copy dokumen tersebut saat melakukan pengaduan</li>
+                                <li>Catatlah nomor register yang diberikan Bank dan nama petugas yang menerima
+pengaduan.</li>
+                                <li>Simpan dokumen surat-menyurat yang ada termasuk surat hasil penyelesaian
+pengaduan</li>
+                            </ol>
+                        </div>
+
+                        <div class="row prosedur-columns">
+                            <div class="col-lg-6 prosedur-column">
+                                <!-- Poin C: Alur Pengaduan Nasabah -->
+                                <h4>C. Alur Pengaduan Nasabah</h4>
+                                <ol class="mb-3">
+                                    <li>Penyampaian Pengaduan mengenai produk dan/atau layanan kepada BPR Datagita
+Mustika hanya dapat disampaikan oleh Nasabah/Perwakilan Nasabah yang bertindak
+untuk untuk dan/atau atas nama Nasabah.</li>
+                                    <li>Nasabah/Perwakilan Nasabah dapat menyampaikan pengaduan (lisan / tertulis)</li>
+                                    <li>Prosedur Penanganan dan Penyelesaian Pengaduan adalah sebagai berikut :
+</li>
+<ul>
+    <li>Nasabah menyampaikan pengaduan
+</li>
+    <li>BPR Datagita Mustika menerima pengaduan, melakukan verifikasi data nasabah
+dan membuat nomor pengaduan</li>
+    <li>Nasabah menerima nomor pengaduan</li>
+    <li>BPR Datagita Mustika menindaklanjuti pengaduan nasabah sesuai jangka waktu
+penyelesaian berdasarkan jenis pengaduan yang disampaikan.</li>
+</ul>
+                                    <li>BPR Datagita Mustika menyampaikan hasil penyelesaian pengaduan, jika nasabah
+sepakat atas penyelesaian pengaduan maka pengaduan dianggap selesai.</li>
+                                    <li>BPR Datagita Mustika menyampaikan informasi bahwa pengaduan Nasabah telah
+diselesaikan</li>
+                                </ol>
+                                <p class="text-muted">
+                                   Sesuai Surat Edaran OJK (SE OJK) No. 17/SEOJK.07/2018 tentang Pedoman Pelaksanaan
+Layanan Pengaduan Konsumen di Sektor Jasa Keuangan, BPR Datagita Mustika akan
+memberikan informasi mengenai jangka waktu penyelesaian pengaduan nasabah melalui
+telepon, surat dan/atau surat elektronik (email). Jika nasabah sepakat atas hasil penyelesaian
+maka pengaduan nasabah dianggap selesai. Namun jika nasabah tidak sepakat dengan hasil
+penyelesaian yang disampaikan maka nasabah dapat melanjutkan upaya penyelesaian
+pengaduan melalui fasilitasi penyelesaian baik melalui Bank Indonesia (BI) khusus untuk
+pengaduan yang terkait dengan jasa Sistem Pembayaran, melalui Otoritas Jasa keuangan (OJK)
+atau melalui lembaga alternatif penyelesaian sengketa lainnya
+                                </p>
+                                <p>Penyelesaian sengketa di luar pengadilan dapat dilakukan melalui Otoritas Jasa
+Keuangan/Bank Indonesia/Lembaga Alternatif Penyelesaian Sengketa yang dimuat dalam
+Daftar Lembaga Alternatif Penyelesaian Sengketa yang ditetapkan oleh Otoritas Jasa
+Keuangan.</p>
+                            </div>
+
+                            <div class="col-lg-6 prosedur-column">
+                                <!-- Judul Kedua: KERAHASIAAN DATA NASABAH -->
+                                <h3 class="border-bottom pb-3 mb-4">KERAHASIAAN DATA NASABAH</h3>
+                                <p class="mb-3">
+                                   Bank akan menjaga kerahasian data nasabah yang melakukan pengaduan kepada Bank
+terhadap pihak manapun, kecuali :
+                                </p>
+
+                                <!-- 8 Poin Menggunakan Bullet/Radio Button -->
+                                <ul class="mb-4">
+                                    <li>Kepada pihak Otoritas Jasa Keuangan;</li>
+                                    <li>Dalam rangka penyelesaian pengaduan;</li>
+                                    <li>Diwajibkan oleh peraturan perundang-undangan dan / atau;</li>
+                                    <li>Atas persetujuan nasabah yang bersangkutan</li>
+                                </ul>
+                                <p>Demi kelancaran proses pengaduan dan penanganan pengaduan maka nasabah perlu
+memperhatikan hal-hal berikut:</p>
+                                <ul>
+                                    <li>Tentukan inti permasalahan yang akan diadukan</li>
+                                    <li>Siapkan dokumen pendukung yang terkait permasalahan yang akan diadukan.</li>
+                                    <li>Simpan dengan baik dokumen-dokumen asli yang dimiliki dan sampaikan kepada bank
+salinan / copy dokumen tersebut saat melakukan pengaduan.
+</li>
+                                    <li>Catatlah nomor register yang diberikan Bank dan nama petugas yang menerima
+pengaduan.</li>
+<li>Simpan dokumen surat – menyurat yang ada termasuk surat hasil penyelesaian
+pengaduan.</li>
+                                </ul>
+
+                                <!-- Deskripsi Pendek Penutup -->
+                                <p class="text-muted mb-0" style="font-size: 14px;">
+                                    * Apabila nasabah tidak puas dengan hasil penyelesaian yang disampaikan Bank, Nasabah dapat
+melanjutkan upaya penyelesaian melalui fasilitas penyelesaian melalui Otoritas Jasa Keuangan
+(OJK), Lembaga Alternatif Penyelesaian Sengketa (LAPS) atau ke jalur hukum
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
+<<<<<<< HEAD
 
             <div class="row justify-content-center mb-4">
                 <div class="col-lg-8">
@@ -681,10 +802,14 @@
                     </iframe>
                 </div>
             </div>
+=======
+            <!-- End Konten Hard Code -->
+
+>>>>>>> a79f53c (add tab jual aset and lelang bprsms)
             <!-- TEKS + IKON ARAH -->
-            <div class="row justify-content-center mb-3" style="margin-top: 50px">
+            <div class="row justify-content-center mb-3" style="margin-top: 20px">
                 <div class="col-md-6 text-center">
-                    <div style="font-size:18px;  color:#333;">
+                    <div style="font-size:18px; color:#333;">
                         Klik pengaduan di bawah ini
                     </div>
                     <div style="font-size:30px; margin-top:5px;">
@@ -692,18 +817,17 @@
                     </div>
                 </div>
             </div>
+
             <div class="row justify-content-center">
                 <div class="col-md-6 mb-3">
                     <a href="#" class="btn btn-lg" id="btnPengaduan"
-                        style=" width: 80%; padding: 15px 7px; background-color: #ff5500; color: #ffffff;font-size: 25px; border-radius: 30px;">
+                        style="width: 80%; padding: 15px 7px; background-color: #ff5500; color: #ffffff; font-size: 25px; border-radius: 30px;">
                         <i class="fas fa-edit mr-2"></i> Pengaduan Nasabah
                     </a>
-
                 </div>
             </div>
 
-
-            </div>
+        </div>
     </section>
 
 

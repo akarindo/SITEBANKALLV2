@@ -4,19 +4,13 @@ namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\LelangModel;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use DB;
+use Illuminate\Http\Request;
 
 class LelangController extends Controller
 {
-
-
-    public function index()
+    public function index(Request $request)
     {
-
-        $today = Carbon::today();
-
         $data['lelang'] = LelangModel::select('*')
             ->addSelect(DB::raw("CASE 
                 WHEN type = 0 THEN 'Lelang'
@@ -28,22 +22,24 @@ class LelangController extends Controller
             ->orderBy('mulai', 'desc')
             ->get();
 
+        // Keep the combined collection for other brands, while BPR SMS gets
+        // separate collections so each tab only shows its own content.
+        $data['lelangItems'] = $data['lelang']->where('type', 0)->values();
+        $data['jualAsetItems'] = $data['lelang']->where('type', 1)->values();
+        $data['activeTab'] = $request->query('tab') === 'jual-aset' ? 'jual-aset' : 'lelang';
 
         return view(env('GLOBAL_LELANG'), $data);
     }
-
 
     public function detlelang($id)
     {
 
         $data['lelang'] = LelangModel::findOrFail($id);
 
-
         return view(env('GLOBAL_DETAILLELANG'), $data);
     }
 
     // public function detlelang() {
-
 
     //     return view(config('subdomain.GLOBAL_DETAILLELANG'));
 

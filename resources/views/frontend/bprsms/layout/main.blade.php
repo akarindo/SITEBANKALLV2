@@ -29,6 +29,7 @@
                 class="bi bi-arrow-up-short"></i></a> --}}
     </div>
 
+    @stack('scripts')
     @include('frontend.bprsms.layout.script')
     @include(config('subdomain.GLOBAL_INCFOOTER'))
 
