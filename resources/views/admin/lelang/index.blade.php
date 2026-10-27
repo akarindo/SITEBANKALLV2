@@ -1,6 +1,9 @@
 @extends('layouts.admin')
 
 @section('content')
+@php
+    $isBprSms = config('subdomain.CUSTOM_PAGE_BERANDA') === 'frontend.bprsms.index';
+@endphp
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <style>
@@ -29,7 +32,7 @@
                             <div class="box p-5">
                                 <div class="flex">
                                     <i data-lucide="image" class="report-box__icon text-primary"></i>
-                                    <div class="ml-auto">
+                                    <div class="ml-auto"> 
                                         <button class="btn btn-sm btn-primary" type="button"
                                             onclick="openinputmodal(null)">
                                             <i data-lucide="plus-square"></i>
@@ -161,13 +164,22 @@
                         <div class="text-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-span-12 sm:col-span-6">
+                    <div class="col-span-12 sm:col-span-6 auction-limit-field">
                         <label for="txtLimit" class="form-label">Limit</label>
                         <div class="input-group">
                             <span class="input-group-text">Rp</span>
                             <input id="txtLimit" name="limit" type="number" class="form-control" placeholder="0">
                         </div>
                     </div>
+                    @if ($isBprSms)
+                    <div class="col-span-12 sm:col-span-6 sms-asset-only" style="display: none;">
+                        <label for="txtHargaPenawaran" class="form-label">Harga Penawaran</label>
+                        <div class="input-group">
+                            <span class="input-group-text">Rp</span>
+                            <input id="txtHargaPenawaran" name="harga_penawaran" type="number" class="form-control" min="0" placeholder="0">
+                        </div>
+                    </div>
+                    @endif
                     <div class="col-span-12 sm:col-span-6">
                         <label for="txtCaraPenawaran" class="form-label">Cara Penawaran</label>
                         <select id="txtCaraPenawaran" name="cara_penawaran" class="form-control">
@@ -175,14 +187,14 @@
                             <option value="1">Closed Bidding</option>
                         </select>
                     </div>
-                    <div class="col-span-12 sm:col-span-6">
+                    <div class="col-span-12 sm:col-span-6 auction-guarantee-field">
                         <label for="txtJaminan" class="form-label">Jaminan</label>
                         <div class="input-group">
                             <span class="input-group-text">Rp</span>
                             <input id="txtJaminan" name="jaminan" type="number" class="form-control">
                         </div>
                     </div>
-                    <div class="col-span-12 sm:col-span-6">
+                    <div class="col-span-12 sm:col-span-6 auction-guarantee-deadline-field">
                         <label for="detBatasAkhirJaminan" class="form-label">Batas Akhir Jaminan</label>
                         <input id="detBatasAkhirJaminan" type="date" name="batas_akhir_jaminan" class="form-control"
                             data-single-mode="true">
@@ -219,6 +231,24 @@
                         <label for="txtKota" class="form-label">Kota</label>
                         <input id="txtKota" name="kota" type="text" class="form-control">
                     </div>
+                    @if ($isBprSms)
+                    <div class="col-span-12 sm:col-span-6 sms-asset-only" style="display: none;">
+                        <label for="txtLokasi" class="form-label">Lokasi Aset</label>
+                        <input id="txtLokasi" name="lokasi" type="text" class="form-control">
+                    </div>
+                    <div class="col-span-12 sm:col-span-6 sms-asset-only" style="display: none;">
+                        <label for="txtLuasTanah" class="form-label">Luas Tanah</label>
+                        <input id="txtLuasTanah" name="luas_tanah" type="text" class="form-control" placeholder="Contoh: 120 m2">
+                    </div>
+                    <div class="col-span-12 sm:col-span-6 sms-asset-only" style="display: none;">
+                        <label for="txtLuasBangunan" class="form-label">Luas Bangunan</label>
+                        <input id="txtLuasBangunan" name="luas_bangunan" type="text" class="form-control" placeholder="Contoh: 80 m2">
+                    </div>
+                    <div class="col-span-12 sm:col-span-6 sms-asset-only" style="display: none;">
+                        <label for="txtLegalitas" class="form-label">Legalitas</label>
+                        <input id="txtLegalitas" name="legalitas" type="text" class="form-control" placeholder="Contoh: SHM / HGB">
+                    </div>
+                    @endif
                     <div class="col-span-12 sm:col-span-6">
                         <label for="txtLink" class="form-label">Link</label>
                         <input id="txtLink" name="link" type="text" class="form-control">
@@ -233,6 +263,13 @@
                         <input id="filBanner" accept="image/*" type="file" name="banner" class="form-control"
                             dat-showpreview="true">
                     </div>
+                    @if ($isBprSms)
+                    <div class="col-span-12 sms-asset-only" style="display: none;">
+                        <label for="filAlbum" class="form-label">Album Foto / Gambar Aset</label>
+                        <input id="filAlbum" accept="image/jpeg,image/png,image/webp" type="file" name="album[]" class="form-control" multiple>
+                        <div class="form-help mt-1">Pilih beberapa gambar untuk ditampilkan sebagai slider pada banner detail aset. Maksimal 2 MB per gambar.</div>
+                    </div>
+                    @endif
                     <div class="col-span-12">
                         <label for="txtUraian" class="form-label">Uraian Lengkap</label>
                         <input type="hidden" name="uraian" id="txtUraianHidden">
@@ -255,7 +292,8 @@
 
 <script>
     var inputmodal;
-var quillUraian; // Definisi variabel global
+    var quillUraian; // Definisi variabel global
+    const isBprSms = @json($isBprSms);
 
 $(document).ready(function () {
     // 1. Inisialisasi Quill dengan Toolbar Lengkap
@@ -287,17 +325,33 @@ $(document).ready(function () {
     });
 
     inputmodal = tailwind.Modal.getOrCreateInstance(document.querySelector("#modalInputBanner"));
+    $('#txtType').on('change', toggleAssetFields);
+    toggleAssetFields();
 });
+
+function toggleAssetFields() {
+    if (!isBprSms) {
+        return;
+    }
+
+    const isAsset = $('#txtType').val() === '1';
+    $('.sms-asset-only').toggle(isAsset);
+    $('.auction-limit-field').toggle(!isAsset);
+    $('.auction-guarantee-field').toggle(!isAsset);
+    $('.auction-guarantee-deadline-field').toggle(!isAsset);
+}
 
 function openinputmodal(t) {
     inputmodal.show();
     
     // Reset Form
     $('#txtId').val(null);
+    $('#txtHargaPenawaran, #txtLokasi, #txtLuasTanah, #txtLuasBangunan, #txtLegalitas').val('');
     quillUraian.setContents([]); // Mengosongkan editor
     $('#txtUraianHidden').val('');
     $('.showpreviewfile_0_0').remove();
     $('.showpreviewfile_1_0').remove();
+    $('.showpreviewalbum').remove();
 
     if (t) {
         $('#txtId').val(t.id);
@@ -315,6 +369,7 @@ function openinputmodal(t) {
         document.querySelector('#slcKategori').tomselect.setValue(t.kategoris);
         $('#txtTitle').val(t.title);
         $('#txtLimit').val(t.limit);
+        $('#txtHargaPenawaran').val(t.harga_penawaran || '');
         $('#txtCaraPenawaran').val(t.cara_penawaran).trigger('change');
         $('#txtJaminan').val(t.jaminan);
         $('#detBatasAkhirJaminan').val(dayjs(t.batas_akhir_jaminan).format('YYYY-MM-DD'));
@@ -325,6 +380,10 @@ function openinputmodal(t) {
         $('#txtLampiran').val(t.lampiran);
         $('#txtProvinsi').val(t.provinsi);
         $('#txtKota').val(t.kota);
+        $('#txtLokasi').val(t.lokasi || '');
+        $('#txtLuasTanah').val(t.luas_tanah || '');
+        $('#txtLuasBangunan').val(t.luas_bangunan || '');
+        $('#txtLegalitas').val(t.legalitas || '');
         $('#txtLink').val(t.link);
 
         // Preview Image Logic tetap sama
@@ -334,7 +393,14 @@ function openinputmodal(t) {
         if (t.banner) {
             $('#filBanner').parent().append('<img src="/recfil?rf=' + t.banner + '" class="showpreviewfile_1_0 mt-2" style="width:130px;">')
         }
+        if (Array.isArray(t.album)) {
+            t.album.forEach(function (image) {
+                $('#filAlbum').parent().append('<img src="/recfil?rf=' + image + '" class="showpreviewalbum mt-2 mr-2" style="width:130px; height:90px; object-fit:cover;">');
+            });
+        }
     }
+
+    toggleAssetFields();
 }
 </script>
 @endsection

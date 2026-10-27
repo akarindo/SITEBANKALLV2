@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class LelangModel extends Model
 {
     use SoftDeletes;
+
     protected $table = 'lelangs';
+
     protected $fillable = [
         'type',
         'urutan',
@@ -18,7 +20,9 @@ class LelangModel extends Model
         'slug',
         'banner',
         'thumbnail',
+        'album',
         'limit',
+        'harga_penawaran',
         'cara_penawaran',
         'jaminan',
         'batas_akhir_jaminan',
@@ -30,16 +34,26 @@ class LelangModel extends Model
         'lampiran',
         'provinsi',
         'kota',
+        'lokasi',
+        'luas_tanah',
+        'luas_bangunan',
+        'legalitas',
         'link',
         'created_by',
         'updated_by',
     ];
 
+    protected $casts = [
+        'album' => 'array',
+    ];
+
     protected $appends = ['tags', 'kategoris'];
+
     public function getTagsAttribute()
     {
         return json_decode($this->tag);
     }
+
     public function getKategorisAttribute()
     {
         return json_decode($this->kategori);
@@ -49,6 +63,7 @@ class LelangModel extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
     public function updatedBy()
     {
         return $this->belongsTo(User::class, 'updated_by');

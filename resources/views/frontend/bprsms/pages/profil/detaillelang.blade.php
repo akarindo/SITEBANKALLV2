@@ -8,11 +8,24 @@
     $actionLabel = $isAsset ? 'LIHAT INFORMASI ASET' : 'IKUTI LELANG';
     $actionIcon = $isAsset ? 'fa-arrow-up-right-from-square' : 'fa-gavel';
     $backUrl = url('/lelang-jualaset') . '?tab=' . ($isAsset ? 'jual-aset' : 'lelang');
+    $assetImages = [];
+
+    if ($isAsset && $lelang->banner) {
+        $assetImages[] = $lelang->banner;
+    }
+    if ($isAsset && is_array($lelang->album)) {
+        $assetImages = array_merge($assetImages, $lelang->album);
+    }
+    if ($isAsset && empty($assetImages) && $lelang->thumbnail) {
+        $assetImages[] = $lelang->thumbnail;
+    }
 @endphp
 
 <style>
     .sms-detail-page { background: transparent; padding-bottom: 80px; }
+    .sms-asset-detail-page { background: linear-gradient(180deg, #fffaf7 0%, #f8f9fb 48%, #f8f9fb 100%); }
     .sms-detail-shell { margin-top: 42px; position: relative; z-index: 2; }
+    .sms-asset-detail-page .sms-detail-shell { margin-top: 28px; }
     .sms-detail-card { overflow: hidden; border: 0; border-radius: 20px; background: transparent; box-shadow: none; }
     .sms-detail-image { height: 390px; background: #f5f5f5; }
     .sms-detail-image img { width: 100%; height: 390px; object-fit: cover; }
@@ -50,17 +63,94 @@
     .sms-detail-content .nav-link:hover, .sms-detail-content .nav-link.active { border-bottom-color: #f34405; color: #f34405; }
     .sms-detail-tab-pane { min-height: 110px; padding-top: 18px; color: #555; font-size: 14px; line-height: 1.8; overflow: visible; }
     .sms-detail-tab-pane img { max-width: 100%; height: auto; }
-    .sms-uraian-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
-    .sms-uraian-gallery a { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 12px; background: #f5f5f5; }
-    .sms-uraian-gallery a::after { position: absolute; right: 10px; bottom: 10px; width: 28px; height: 28px; border-radius: 50%; background: rgba(0, 0, 0, .55); color: #fff; content: "\\f065"; font-family: "Font Awesome 6 Free"; font-size: 12px; font-weight: 900; line-height: 28px; text-align: center; opacity: 0; transition: opacity .2s ease; }
-    .sms-uraian-gallery a:hover::after { opacity: 1; }
-    .sms-uraian-gallery img { width: 100%; height: 100% !important; object-fit: cover; transition: transform .3s ease; }
-    .sms-uraian-gallery a:hover img { transform: scale(1.05); }
+
+    .sms-asset-detail-card {
+        overflow: hidden;
+        border: 1px solid #f0e5df;
+        border-radius: 24px;
+        background: #fff;
+        box-shadow: 0 18px 45px rgba(57, 30, 20, .09);
+    }
+
+    .sms-asset-detail-card > .row {
+        display: grid;
+        grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+        margin: 0;
+    }
+
+    .sms-asset-detail-card > .row > .col-lg-6,
+    .sms-asset-detail-card .sms-detail-side {
+        display: contents;
+    }
+
+    .sms-asset-detail-card > .row > .col-lg-6:first-child {
+        display: block;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .sms-asset-gallery { min-width: 0; background: #f5f5f5; }
+
+    .sms-asset-thumbnails {
+        display: flex;
+        gap: 8px;
+        padding: 10px;
+        overflow-x: auto;
+        background: #fff;
+        scrollbar-width: thin;
+    }
+
+    .sms-asset-thumbnail {
+        flex: 0 0 64px;
+        width: 64px;
+        height: 48px;
+        padding: 0;
+        overflow: hidden;
+        border: 2px solid transparent;
+        border-radius: 7px;
+        background: #f5f5f5;
+        cursor: pointer;
+        opacity: .65;
+        transition: border-color .2s ease, opacity .2s ease;
+    }
+
+    .sms-asset-thumbnail:hover,
+    .sms-asset-thumbnail.active { border-color: #f34405; opacity: 1; }
+    .sms-asset-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+
+    .sms-asset-detail-card .sms-detail-copy {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: stretch;
+        padding: 30px 34px 25px;
+        background: #fff;
+    }
+
+    .sms-asset-detail-card .sms-detail-copy h2 {
+        max-width: 470px;
+        margin-bottom: 18px;
+        font-size: clamp(24px, 3vw, 34px);
+        letter-spacing: -.02em;
+    }
+
+    .sms-asset-detail-card .sms-detail-badge { margin-bottom: 12px; padding: 6px 11px; box-shadow: 0 5px 12px rgba(243, 68, 5, .08); }
+    .sms-asset-detail-card .sms-detail-metrics { margin-bottom: 16px; }
+    .sms-asset-detail-card .sms-detail-metric { padding: 11px 13px; }
+    .sms-asset-detail-card .sms-detail-content { display: block; padding: 0 34px 28px; border-top: 1px solid #f0e5df; }
+    .sms-asset-detail-card .sms-detail-facts { margin-bottom: 16px; padding: 4px 0 0; }
+    .sms-asset-detail-card .sms-detail-fact { display: grid; grid-template-columns: 22px minmax(90px, .38fr) minmax(0, 1fr); align-items: start; gap: 10px; padding: 8px 0; }
+    .sms-asset-detail-card .sms-detail-fact strong { color: #29221f; font-weight: 700; text-align: right; overflow-wrap: anywhere; }
+    .sms-asset-detail-card .sms-detail-tab-pane { min-height: 100px; padding: 17px 4px 4px; }
+
     @media (max-width: 767px) {
         .sms-detail-copy { padding: 28px 22px 24px; }
         .sms-detail-image, .sms-detail-image img, .sms-asset-slider { height: 280px; }
         .sms-detail-content { padding: 0 22px 28px; }
-        .sms-uraian-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+        .sms-asset-detail-card > .row { display: block; }
+        .sms-asset-detail-card .sms-asset-slider { height: 260px; }
+        .sms-asset-detail-card .sms-detail-copy { display: block; padding: 24px 20px 20px; }
+        .sms-asset-detail-card .sms-detail-content { display: block; padding: 0 20px 22px; }
+        .sms-asset-detail-card .sms-detail-fact { grid-template-columns: 20px minmax(84px, .45fr) minmax(0, 1fr); gap: 8px; }
     }
 </style>
 
@@ -78,24 +168,36 @@
     </div>
 </div>
 
-<main class="sms-detail-page">
+<main class="sms-detail-page {{ $isAsset ? 'sms-asset-detail-page' : '' }}">
     <div class="container sms-detail-shell">
-        <div class="sms-detail-card">
+        <div class="sms-detail-card {{ $isAsset ? 'sms-asset-detail-card' : '' }}">
             <div class="row g-0">
                 <div class="col-lg-6">
                     @if ($isAsset)
-                        <div class="sms-asset-slider" id="smsAssetSlider" aria-label="Galeri foto {{ $lelang->title }}">
-                            <div class="sms-asset-track" data-asset-track>
-                                @if ($lelang->banner ?: $lelang->thumbnail)
-                                    <div class="sms-asset-slide active">
-                                        <img src="{{ url('/recfil?display=true&rf=' . ($lelang->banner ?: $lelang->thumbnail)) }}" alt="{{ $lelang->title }}">
-                                    </div>
-                                @endif
+                        <div class="sms-asset-gallery">
+                            <div class="sms-asset-slider" id="smsAssetSlider" aria-label="Galeri foto {{ $lelang->title }}">
+                                <div class="sms-asset-track" data-asset-track>
+                                    @foreach ($assetImages as $image)
+                                        <div class="sms-asset-slide {{ $loop->first ? 'active' : '' }}">
+                                            <img src="{{ url('/recfil?display=true&rf=' . $image) }}" alt="{{ $lelang->title }} - foto {{ $loop->iteration }}">
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <button class="sms-asset-slider-button previous" type="button" data-asset-previous aria-label="Foto sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button class="sms-asset-slider-button next" type="button" data-asset-next aria-label="Foto berikutnya"><i class="fa-solid fa-chevron-right"></i></button>
+                                <div class="sms-asset-dots" data-asset-dots></div>
                             </div>
-                            <button class="sms-asset-slider-button previous" type="button" data-asset-previous aria-label="Foto sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
-                            <button class="sms-asset-slider-button next" type="button" data-asset-next aria-label="Foto berikutnya"><i class="fa-solid fa-chevron-right"></i></button>
-                            <div class="sms-asset-dots" data-asset-dots></div>
+                            @if (count($assetImages) > 1)
+                                <div class="sms-asset-thumbnails" aria-label="Pilih foto aset">
+                                    @foreach ($assetImages as $image)
+                                        <button class="sms-asset-thumbnail {{ $loop->first ? 'active' : '' }}" type="button" data-asset-thumbnail="{{ $loop->index }}" aria-label="Tampilkan foto {{ $loop->iteration }}">
+                                            <img src="{{ url('/recfil?display=true&rf=' . $image) }}" alt="" loading="lazy">
+                                        </button>
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
+                        @include('frontend.bprsms.pages.profil.detaillelang-tabs')
                     @else
                         <div class="sms-detail-image">
                             @if ($lelang->banner ?: $lelang->thumbnail)
@@ -109,56 +211,52 @@
                 <div class="col-lg-6">
                     <div class="sms-detail-side">
                         <div class="sms-detail-copy">
-                        <div class="sms-detail-badge"><i class="fa-solid {{ $isAsset ? 'fa-building-circle-check' : 'fa-gavel' }}"></i> {{ $categoryLabel }}</div>
-                        <h2>{{ $lelang->title }}</h2>
+                            <div class="sms-detail-badge"><i class="fa-solid {{ $isAsset ? 'fa-building-circle-check' : 'fa-gavel' }}"></i> {{ $categoryLabel }}</div>
+                            <h2>{{ $lelang->title }}</h2>
 
-                        @if (!$isAsset)
-                            <div class="sms-detail-metrics">
-                                <div class="sms-detail-metric">
-                                    <small>Nilai Limit</small>
-                                    <strong>{{ $lelang->limit ? 'Rp ' . number_format($lelang->limit, 0, ',', '.') : 'Tanpa nilai limit' }}</strong>
+                            @if ($isAsset)
+                                <div class="sms-detail-metrics">
+                                    <div class="sms-detail-metric" style="grid-column: 1 / -1;">
+                                        <small>Harga Penawaran</small>
+                                        <strong>{{ $lelang->harga_penawaran ? 'Rp ' . number_format($lelang->harga_penawaran, 0, ',', '.') : 'Belum tersedia' }}</strong>
+                                    </div>
                                 </div>
-                                <div class="sms-detail-metric">
-                                    <small>Uang Jaminan</small>
-                                    <strong>{{ $lelang->jaminan ? 'Rp ' . number_format($lelang->jaminan, 0, ',', '.') : 'Tanpa uang jaminan' }}</strong>
+                            @else
+                                <div class="sms-detail-metrics">
+                                    <div class="sms-detail-metric">
+                                        <small>Nilai Limit</small>
+                                        <strong>{{ $lelang->limit ? 'Rp ' . number_format($lelang->limit, 0, ',', '.') : 'Tanpa nilai limit' }}</strong>
+                                    </div>
+                                    <div class="sms-detail-metric">
+                                        <small>Uang Jaminan</small>
+                                        <strong>{{ $lelang->jaminan ? 'Rp ' . number_format($lelang->jaminan, 0, ',', '.') : 'Tanpa uang jaminan' }}</strong>
+                                    </div>
                                 </div>
+                            @endif
+
+                            <div class="sms-detail-facts">
+                                <div class="sms-detail-fact"><i class="fa-regular fa-calendar-check"></i><span>Batas akhir</span><strong>{{ $lelang->selesai ? \Carbon\Carbon::parse($lelang->selesai)->translatedFormat('d M Y') : '-' }}</strong></div>
+                                <div class="sms-detail-fact"><i class="fa-solid fa-user-tie"></i><span>Penyelenggara</span><strong>{{ $lelang->penyelenggara ?: '-' }}</strong></div>
+                                <div class="sms-detail-fact"><i class="fa-solid fa-location-dot"></i><span>Lokasi</span><strong>{{ $isAsset && $lelang->lokasi ? $lelang->lokasi : trim(($lelang->kota ?: '-') . ($lelang->provinsi ? ', ' . $lelang->provinsi : '')) }}</strong></div>
+                                @if ($isAsset)
+                                    <div class="sms-detail-fact"><i class="fa-solid fa-ruler-combined"></i><span>Luas tanah</span><strong>{{ $lelang->luas_tanah ?: '-' }}</strong></div>
+                                    <div class="sms-detail-fact"><i class="fa-solid fa-house"></i><span>Luas bangunan</span><strong>{{ $lelang->luas_bangunan ?: '-' }}</strong></div>
+                                    <div class="sms-detail-fact"><i class="fa-solid fa-file"></i><span>Legalitas</span><strong>{{ $lelang->legalitas ?: '-' }}</strong></div>
+                                @else
+                                    <div class="sms-detail-fact"><i class="fa-solid fa-hashtag"></i><span>Kode lot</span><strong>{{ $lelang->kode_lot ?: '-' }}</strong></div>
+                                @endif
                             </div>
-                        @endif
 
-                        <div class="sms-detail-facts">
-                            <div class="sms-detail-fact"><i class="fa-regular fa-calendar-check"></i><span>Batas akhir</span><strong>{{ $lelang->selesai ? \Carbon\Carbon::parse($lelang->selesai)->translatedFormat('d M Y') : '-' }}</strong></div>
-                            <div class="sms-detail-fact"><i class="fa-solid fa-user-tie"></i><span>Penyelenggara</span><strong>{{ $lelang->penyelenggara ?: '-' }}</strong></div>
-                            <div class="sms-detail-fact"><i class="fa-solid fa-location-dot"></i><span>Lokasi</span><strong>{{ trim(($lelang->kota ?: '-') . ($lelang->provinsi ? ', ' . $lelang->provinsi : '')) }}</strong></div>
-                            @if (!$isAsset)
-                                <div class="sms-detail-fact"><i class="fa-solid fa-hashtag"></i><span>Kode lot</span><strong>{{ $lelang->kode_lot ?: '-' }}</strong></div>
+                            @if ($lelang->link)
+                                <a href="{{ $lelang->link }}" target="_blank" rel="noopener" class="sms-detail-action"><i class="fa-solid {{ $actionIcon }}"></i> {{ $actionLabel }}</a>
+                            @else
+                                <span class="sms-detail-action disabled"><i class="fa-solid {{ $actionIcon }}"></i> {{ $actionLabel }}</span>
                             @endif
                         </div>
 
-                        @if ($lelang->link)
-                            <a href="{{ $lelang->link }}" target="_blank" rel="noopener" class="sms-detail-action"><i class="fa-solid {{ $actionIcon }}"></i> {{ $actionLabel }}</a>
-                        @else
-                            <span class="sms-detail-action disabled"><i class="fa-solid {{ $actionIcon }}"></i> {{ $actionLabel }}</span>
+                        @if (!$isAsset)
+                            @include('frontend.bprsms.pages.profil.detaillelang-tabs')
                         @endif
-                        </div>
-
-                        <div class="sms-detail-content">
-                            <ul class="nav nav-tabs" id="smsDetailTab" role="tablist">
-                                <li class="nav-item" role="presentation"><button class="nav-link active" id="sms-uraian-tab" data-bs-toggle="tab" data-bs-target="#sms-uraian" type="button" role="tab">Uraian</button></li>
-                                <li class="nav-item" role="presentation"><button class="nav-link" id="sms-lampiran-tab" data-bs-toggle="tab" data-bs-target="#sms-lampiran" type="button" role="tab">Lampiran</button></li>
-                                @if (!$isAsset)
-                                    <li class="nav-item" role="presentation"><button class="nav-link" id="sms-kodelot-tab" data-bs-toggle="tab" data-bs-target="#sms-kodelot" type="button" role="tab">Kode Lot</button></li>
-                                @endif
-                                <li class="nav-item" role="presentation"><button class="nav-link" id="sms-penyelenggara-tab" data-bs-toggle="tab" data-bs-target="#sms-penyelenggara" type="button" role="tab">Info Penyelenggara</button></li>
-                            </ul>
-                            <div class="tab-content" id="smsDetailTabContent">
-                                <div class="tab-pane fade show active sms-detail-tab-pane" id="sms-uraian" role="tabpanel" aria-labelledby="sms-uraian-tab">{!! $lelang->uraian ?: '<p>Belum ada uraian tersedia.</p>' !!}</div>
-                                <div class="tab-pane fade sms-detail-tab-pane" id="sms-lampiran" role="tabpanel" aria-labelledby="sms-lampiran-tab">{!! $lelang->lampiran ?: '<p>Belum ada lampiran tersedia.</p>' !!}</div>
-                                @if (!$isAsset)
-                                    <div class="tab-pane fade sms-detail-tab-pane" id="sms-kodelot" role="tabpanel" aria-labelledby="sms-kodelot-tab"><p>{{ $lelang->kode_lot ?: '-' }}</p></div>
-                                @endif
-                                <div class="tab-pane fade sms-detail-tab-pane" id="sms-penyelenggara" role="tabpanel" aria-labelledby="sms-penyelenggara-tab"><p>{{ $lelang->penyelenggara ?: '-' }}</p></div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -179,6 +277,7 @@
             const dots = slider.querySelector('[data-asset-dots]');
             const previous = slider.querySelector('[data-asset-previous]');
             const next = slider.querySelector('[data-asset-next]');
+            const thumbnails = Array.from(document.querySelectorAll('[data-asset-thumbnail]'));
             let currentSlide = 0;
             let touchStartX = 0;
 
@@ -206,6 +305,9 @@
                 slides.forEach(function (slide, slideIndex) {
                     slide.classList.toggle('active', slideIndex === currentSlide);
                 });
+                thumbnails.forEach(function (thumbnail) {
+                    thumbnail.classList.toggle('active', Number(thumbnail.dataset.assetThumbnail) === currentSlide);
+                });
                 dots.innerHTML = '';
                 slides.forEach(function (_, slideIndex) {
                     const dot = document.createElement('button');
@@ -221,6 +323,11 @@
 
             previous.addEventListener('click', function () { showSlide(currentSlide - 1); });
             next.addEventListener('click', function () { showSlide(currentSlide + 1); });
+            thumbnails.forEach(function (thumbnail) {
+                thumbnail.addEventListener('click', function () {
+                    showSlide(Number(thumbnail.dataset.assetThumbnail));
+                });
+            });
             slider.addEventListener('touchstart', function (event) { touchStartX = event.changedTouches[0].screenX; }, { passive: true });
             slider.addEventListener('touchend', function (event) {
                 const distance = event.changedTouches[0].screenX - touchStartX;
@@ -229,25 +336,6 @@
                 }
             }, { passive: true });
             showSlide(0);
-        } else if (uraianImages.length) {
-            const gallery = document.createElement('div');
-            gallery.className = 'sms-uraian-gallery';
-
-            uraianImages.forEach(function (image) {
-                const parent = image.parentElement;
-                const link = document.createElement('a');
-                link.href = image.currentSrc || image.src;
-                link.target = '_blank';
-                link.rel = 'noopener';
-                link.appendChild(image);
-                gallery.appendChild(link);
-
-                if (parent && ['P', 'FIGURE'].includes(parent.tagName) && !parent.textContent.trim() && !parent.children.length) {
-                    parent.remove();
-                }
-            });
-
-            uraian.appendChild(gallery);
         }
 
         if (typeof bootstrap !== 'undefined') {

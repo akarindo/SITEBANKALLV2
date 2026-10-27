@@ -192,7 +192,7 @@
 
     .sms-auction-image {
         position: relative;
-        height: 245px;
+        height: 205px;
         overflow: hidden;
         background: #f5f5f5;
     }
@@ -235,17 +235,17 @@
 
     .sms-auction-card-body {
         display: flex;
-        min-height: 245px;
+        min-height: 0;
         flex-direction: column;
-        padding: 22px;
+        padding: 16px 18px 17px;
     }
 
     .sms-auction-card-body h4 {
         display: -webkit-box;
         overflow: hidden;
-        margin: 0 0 7px;
+        margin: 0 0 5px;
         color: var(--sms-ink);
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 800;
         line-height: 1.35;
         -webkit-box-orient: vertical;
@@ -253,7 +253,7 @@
     }
 
     .sms-auction-location {
-        margin-bottom: 18px;
+        margin-bottom: 11px;
         color: #888;
         font-size: 12px;
     }
@@ -266,12 +266,12 @@
     .sms-auction-values {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-bottom: 18px;
+        gap: 8px;
+        margin-bottom: 11px;
     }
 
     .sms-auction-value {
-        padding: 11px 12px;
+        padding: 9px 10px;
         border-radius: 10px;
         background: #fff7f3;
     }
@@ -297,7 +297,7 @@
         align-items: center;
         gap: 8px;
         margin-top: auto;
-        margin-bottom: 17px;
+        margin-bottom: 11px;
         color: #666;
         font-size: 12px;
     }
@@ -305,6 +305,39 @@
     .sms-auction-deadline i {
         color: var(--sms-orange);
         font-size: 15px;
+    }
+
+    .sms-auction-facts {
+        margin-bottom: 11px;
+    }
+
+    .sms-auction-fact {
+        display: grid;
+        grid-template-columns: 18px minmax(100px, .45fr) minmax(0, 1fr);
+        align-items: start;
+        gap: 6px;
+        padding: 5px 0;
+        border-bottom: 1px solid #f1eae7;
+        color: #968983;
+        font-size: 11px;
+    }
+
+    .sms-auction-fact i {
+        padding-top: 2px;
+        color: var(--sms-orange);
+        text-align: center;
+    }
+
+    .sms-auction-fact strong {
+        color: #4d403b;
+        font-size: 12px;
+        font-weight: 700;
+        text-align: right;
+        overflow-wrap: anywhere;
+    }
+
+    .sms-auction-fact:last-child {
+        border-bottom: 0;
     }
 
     .sms-auction-detail {
@@ -432,7 +465,7 @@
                                 @php
                                     $now = \Carbon\Carbon::now();
                                     $isLive = $item->mulai && $item->selesai && $now->between(\Carbon\Carbon::parse($item->mulai), \Carbon\Carbon::parse($item->selesai));
-                                    $image = $item->thumbnail ?: $item->banner;
+                                    $image = $item->thumbnail ?: $item->banner ?: (($item->album ?? [])[0] ?? null);
                                 @endphp
                                 <div class="col-xl-4 col-md-6">
                                     <article class="sms-auction-card">
@@ -451,18 +484,44 @@
                                         </a>
                                         <div class="sms-auction-card-body">
                                             <h4>{{ $item->title }}</h4>
-                                            <div class="sms-auction-location"><i class="fa-solid fa-location-dot"></i>{{ $item->kota ?: 'Lokasi belum tersedia' }}{{ $item->provinsi ? ', ' . $item->provinsi : '' }}</div>
-                                            <div class="sms-auction-values">
-                                                <div class="sms-auction-value">
-                                                    <small>Nilai Limit</small>
-                                                    <strong>{{ $item->limit ? 'Rp ' . number_format($item->limit, 0, ',', '.') : 'Tidak tersedia' }}</strong>
-                                                </div>
-                                                <div class="sms-auction-value">
-                                                    <small>Uang Jaminan</small>
-                                                    <strong>{{ $item->jaminan ? 'Rp ' . number_format($item->jaminan, 0, ',', '.') : 'Tidak tersedia' }}</strong>
-                                                </div>
-                                            </div>
-                                            <div class="sms-auction-deadline">
+                                            <div class="sms-auction-location"><i class="fa-solid fa-location-dot"></i>{{ $item->type == 1 && $item->lokasi ? $item->lokasi : ($item->kota ?: 'Lokasi belum tersedia') }}{{ $item->type != 1 && $item->provinsi ? ', ' . $item->provinsi : '' }}</div>
+                                             <div class="sms-auction-values">
+                                                 @if ($item->type == 1)
+                                                     <div class="sms-auction-value" style="grid-column: 1 / -1;">
+                                                         <small>Harga Penawaran</small>
+                                                         <strong>{{ $item->harga_penawaran ? 'Rp ' . number_format($item->harga_penawaran, 0, ',', '.') : 'Tidak tersedia' }}</strong>
+                                                     </div>
+                                                 @else
+                                                     <div class="sms-auction-value">
+                                                         <small>Nilai Limit</small>
+                                                         <strong>{{ $item->limit ? 'Rp ' . number_format($item->limit, 0, ',', '.') : 'Tidak tersedia' }}</strong>
+                                                     </div>
+                                                     <div class="sms-auction-value">
+                                                         <small>Uang Jaminan</small>
+                                                         <strong>{{ $item->jaminan ? 'Rp ' . number_format($item->jaminan, 0, ',', '.') : 'Tidak tersedia' }}</strong>
+                                                     </div>
+                                                 @endif
+                                             </div>
+                                             @if ($item->type == 1)
+                                                  <div class="sms-auction-facts" aria-label="Spesifikasi aset">
+                                                      <div class="sms-auction-fact">
+                                                          <i class="fa-solid fa-ruler-combined"></i>
+                                                          <span>Luas tanah</span>
+                                                          <strong>{{ $item->luas_tanah ?: '-' }}</strong>
+                                                      </div>
+                                                      <div class="sms-auction-fact">
+                                                          <i class="fa-solid fa-house"></i>
+                                                          <span>Luas bangunan</span>
+                                                          <strong>{{ $item->luas_bangunan ?: '-' }}</strong>
+                                                      </div>
+                                                      <div class="sms-auction-fact">
+                                                          <i class="fa-solid fa-file"></i>
+                                                          <span>Legalitas</span>
+                                                          <strong>{{ $item->legalitas ?: '-' }}</strong>
+                                                      </div>
+                                                  </div>
+                                             @endif
+                                             <div class="sms-auction-deadline">
                                                 <i class="fa-regular fa-calendar-check"></i>
                                                 <span>Batas akhir: <strong>{{ $item->selesai ? \Carbon\Carbon::parse($item->selesai)->translatedFormat('d M Y') : '-' }}</strong></span>
                                             </div>
