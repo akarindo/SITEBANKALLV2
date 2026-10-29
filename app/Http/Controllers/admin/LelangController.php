@@ -31,8 +31,8 @@ class LelangController extends Controller
         $data['kategori'] = [];
         foreach ($data['data'] as $v) {
 
-            if (is_array($v->tag)) {
-                foreach ($v->tag as $t) {
+            if (is_array($v->tags)) {
+                foreach ($v->tags as $t) {
 
                     if (! in_array($t, $data['tag'])) {
                         $data['tag'][] = $t;
@@ -40,8 +40,8 @@ class LelangController extends Controller
                 }
             }
 
-            if (is_array($v->kategori)) {
-                foreach ($v->kategori as $k) {
+            if (is_array($v->kategoris)) {
+                foreach ($v->kategoris as $k) {
                     if (! in_array($k, $data['kategori'])) {
                         $data['kategori'][] = $k;
                     }
@@ -58,47 +58,56 @@ class LelangController extends Controller
             && (int) $r->input('type') === 1;
 
         $rules = [
-            'type' => 'required',
-            'urutan' => 'required|numeric',
-            'tag' => 'required',
-            'kategori' => 'required',
-            'title' => ['required', Rule::unique('lelangs')->where(function ($query) use ($r) {
-                if ($r->txtId) {
-                    return $query->where('id', '!=', $r->txtId);
-                }
-            }), ],
-            'cara_penawaran' => 'required',
+            'txtId' => 'nullable|integer|exists:lelangs,id',
+            'type' => 'required|in:0,1',
+            'urutan' => 'required|integer|min:1',
+            'tag' => 'required|array|min:1',
+            'tag.*' => 'required|string',
+            'kategori' => 'required|array|min:1',
+            'kategori.*' => 'required|string',
+            'title' => 'required|string|max:255',
+            'cara_penawaran' => 'required|in:0,1',
             'mulai' => 'required|date',
             'selesai' => 'required|date',
-            'penyelenggara' => 'required',
-            'kode_lot' => 'required',
-            // 'uraian' => 'required',
-            'provinsi' => 'required',
-            'kota' => 'required',
+            'penyelenggara' => 'required|string',
+            'kode_lot' => 'required|string',
+            'uraian' => 'required|string',
+            'lampiran' => 'required|string',
+            'provinsi' => 'required|string',
+            'kota' => 'required|string',
+            'link' => 'required|string',
         ];
+
+        $rules['banner'] = $r->filled('txtId') ? 'nullable' : 'required';
+        $rules['thumbnail'] = $r->filled('txtId') ? 'nullable' : 'required';
 
         if ($isBprSmsAsset) {
             $rules['harga_penawaran'] = 'required|numeric|min:0';
-            $rules['lokasi'] = 'nullable|string';
-            $rules['luas_tanah'] = 'nullable|string';
-            $rules['luas_bangunan'] = 'nullable|string';
-            $rules['legalitas'] = 'nullable|string';
-            $rules['album.*'] = 'image|mimes:jpg,jpeg,png,webp|max:2048';
+            $rules['lokasi'] = 'required|string';
+            $rules['luas_tanah'] = 'required|string';
+            $rules['luas_bangunan'] = 'required|string';
+            $rules['legalitas'] = 'required|string';
+            $rules['album'] = $r->filled('txtId') ? 'nullable|array' : 'required|array|min:1';
+            $rules['album.*'] = 'required|image|mimes:jpg,jpeg,png,webp|max:2048';
         } else {
-            $rules['limit'] = 'required|numeric';
-            $rules['jaminan'] = 'required|numeric';
+            $rules['limit'] = 'required|numeric|min:0';
+            $rules['jaminan'] = 'required|numeric|min:0';
             $rules['batas_akhir_jaminan'] = 'required|date';
         }
 
         $valid = Validator::make($r->all(), $rules);
         if ($valid->fails()) {
-            return Redirect::back()->withErrors($valid)->withInput($r->all())->with('error', 'Terjadi kesalahan pada pengisian form');
+            return Redirect::back()
+                ->withErrors($valid)
+                ->withInput($r->except(['banner', 'thumbnail', 'album']))
+                ->with('open_lelang_modal', true)
+                ->with('error', 'Terjadi kesalahan pada pengisian form');
         }
         $input = [
             'type' => $r->type,
             'urutan' => $r->urutan,
-            'tag' => json_encode($r->tag),
-            'kategori' => json_encode($r->kategori),
+            'tag' => $r->input('tag', []),
+            'kategori' => $r->input('kategori', []),
             'title' => $r->title,
             'slug' => Str::slug($r->title),
             'limit' => $isBprSmsAsset ? 0 : $r->limit,
@@ -142,7 +151,11 @@ class LelangController extends Controller
             ]);
             // validasi gagal
             if ($valbanner->fails()) {
-                return back()->with('error', 'Gambar Harus JPG, JPEG, PNG')->withInput();
+                return back()
+                    ->withErrors($valbanner)
+                    ->with('open_lelang_modal', true)
+                    ->with('error', 'Gambar Harus JPG, JPEG, PNG')
+                    ->withInput($r->except(['banner', 'thumbnail', 'album']));
             }
             // proses upload
             $filedesktop = $r->file('banner')->store('lelang/'.time());
@@ -156,18 +169,37 @@ class LelangController extends Controller
             ]);
             // validasi gagal
             if ($valimage->fails()) {
-                return back()->with('error', 'Gambar Harus JPG, JPEG, PNG')->withInput();
+                return back()
+                    ->withErrors($valimage)
+                    ->with('open_lelang_modal', true)
+                    ->with('error', 'Gambar Harus JPG, JPEG, PNG')
+                    ->withInput($r->except(['banner', 'thumbnail', 'album']));
             }
             // proses upload
             $filedesktop = $r->file('thumbnail')->store('lelang/'.time());
             $input['thumbnail'] = $filedesktop;
         }
-        $i = LelangModel::updateOrCreate(['id' => $r->txtId], $input);
-        if ($i) {
+        if ($r->filled('txtId')) {
+            $lelang = LelangModel::find($r->input('txtId'));
+            if (! $lelang) {
+                return Redirect::back()
+                    ->withInput($r->except(['banner', 'thumbnail', 'album']))
+                    ->with('open_lelang_modal', true)
+                    ->with('error', 'Data lelang tidak ditemukan');
+            }
+        } else {
+            $lelang = new LelangModel;
+        }
+
+        $lelang->fill($input);
+        if ($lelang->save()) {
             return Redirect::back()->with('success', 'Data berhasil disimpan');
         }
 
-        return Redirect::back()->withInput($r->all())->with('error', 'Data gagal disimpan');
+        return Redirect::back()
+            ->withInput($r->except(['banner', 'thumbnail', 'album']))
+            ->with('open_lelang_modal', true)
+            ->with('error', 'Data gagal disimpan');
     }
 
     public function destroy($i)

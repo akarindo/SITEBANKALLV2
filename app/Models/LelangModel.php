@@ -44,6 +44,8 @@ class LelangModel extends Model
     ];
 
     protected $casts = [
+        'tag' => 'array',
+        'kategori' => 'array',
         'album' => 'array',
     ];
 
@@ -51,12 +53,24 @@ class LelangModel extends Model
 
     public function getTagsAttribute()
     {
-        return json_decode($this->tag);
+        $tags = $this->getAttribute('tag');
+
+        if (is_string($tags)) {
+            $tags = json_decode($tags, true);
+        }
+
+        return is_array($tags) ? array_values($tags) : [];
     }
 
     public function getKategorisAttribute()
     {
-        return json_decode($this->kategori);
+        $categories = $this->getAttribute('kategori');
+
+        if (is_string($categories)) {
+            $categories = json_decode($categories, true);
+        }
+
+        return is_array($categories) ? array_values($categories) : [];
     }
 
     public function createdBy()

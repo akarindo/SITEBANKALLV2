@@ -118,7 +118,8 @@
 <div id="modalInputBanner" class="modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <form action="/salamprofit/lelang" method="post" enctype="multipart/form-data">
+            <form id="formLelang" action="/salamprofit/lelang" method="post" enctype="multipart/form-data"
+                onsubmit="return validateLelangForm()">
                 @csrf
                 <input type="text" name="txtId" id="txtId" hidden>
                 <!-- BEGIN: Modal Header -->
@@ -128,13 +129,23 @@
                 <!-- END: Modal Header -->
                 <!-- BEGIN: Modal Body -->
                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                    @if ($errors->any())
+                    <div class="col-span-12 alert alert-danger">
+                        <div class="font-medium">Periksa kembali isian berikut:</div>
+                        <ul class="list-disc list-inside mt-1">
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                     <div class="col-span-12 sm:col-span-6">
                         <label for="txtUrutan" class="form-label">Urutan</label>
-                        <input id="txtUrutan" name="urutan" type="number" class="form-control" min="1" step="1">
+                        <input id="txtUrutan" name="urutan" type="number" class="form-control" min="1" step="1" required>
                     </div>
                     <div class="col-span-12 sm:col-span-6">
                         <label for="txtType" class="form-label">Type</label>
-                        <select id="txtType" name="type" class="form-control">
+                        <select id="txtType" name="type" class="form-control" required>
                             <option value="0">Lelang</option>
                             <option value="1">Jual Aset</option>
                         </select>
@@ -142,24 +153,26 @@
                     <div class="col-span-12 sm:col-span-6">
                         <label for="slcTag" class="form-label">Tag</label>
                         <select id="slcTag" data-header="Pilih/Tambah Tag" name="tag[]" class="tom-select w-full"
-                            multiple>
+                            multiple required>
                             @foreach ($tag as $t)
                             <option value="{{$t}}">{{$t}}</option>
                             @endforeach
                         </select>
+                        <div id="slcTagError" class="text-danger mt-1 hidden"></div>
                     </div>
                     <div class="col-span-12 sm:col-span-6">
                         <label for="slcKategori" class="form-label">Kategori</label>
                         <select id="slcKategori" data-header="Pilih/Tambah Kategori" name="kategori[]"    data-placeholder="Wajib isi (Rumah/Kendaraan/Elektronik/Tanah/Pabrik)" 
-                            class="tom-select w-full" multiple>
+                            class="tom-select w-full" multiple required>
                             @foreach ($kategori as $k)
                             <option value="{{$k}}">{{$k}}</option>
                             @endforeach
                         </select>
+                        <div id="slcKategoriError" class="text-danger mt-1 hidden"></div>
                     </div>
                     <div class="col-span-12 sm:col-span-6">
                         <label for="txtTitle" class="form-label">Title</label>
-                        <input id="txtTitle" name="title" type="text" class="form-control">
+                        <input id="txtTitle" name="title" type="text" class="form-control" required>
                         @error('title')
                         <div class="text-danger mt-2">{{ $message }}</div>
                         @enderror
@@ -168,7 +181,7 @@
                         <label for="txtLimit" class="form-label">Limit</label>
                         <div class="input-group">
                             <span class="input-group-text">Rp</span>
-                            <input id="txtLimit" name="limit" type="number" class="form-control" placeholder="0">
+                            <input id="txtLimit" name="limit" type="number" class="form-control" min="0" placeholder="0" required>
                         </div>
                     </div>
                     @if ($isBprSms)
@@ -176,13 +189,13 @@
                         <label for="txtHargaPenawaran" class="form-label">Harga Penawaran</label>
                         <div class="input-group">
                             <span class="input-group-text">Rp</span>
-                            <input id="txtHargaPenawaran" name="harga_penawaran" type="number" class="form-control" min="0" placeholder="0">
+                            <input id="txtHargaPenawaran" name="harga_penawaran" type="number" class="form-control" min="0" placeholder="0" required>
                         </div>
                     </div>
                     @endif
                     <div class="col-span-12 sm:col-span-6">
                         <label for="txtCaraPenawaran" class="form-label">Cara Penawaran</label>
-                        <select id="txtCaraPenawaran" name="cara_penawaran" class="form-control">
+                        <select id="txtCaraPenawaran" name="cara_penawaran" class="form-control" required>
                             <option value="0">Open Bidding</option>
                             <option value="1">Closed Bidding</option>
                         </select>
@@ -191,29 +204,29 @@
                         <label for="txtJaminan" class="form-label">Jaminan</label>
                         <div class="input-group">
                             <span class="input-group-text">Rp</span>
-                            <input id="txtJaminan" name="jaminan" type="number" class="form-control">
+                            <input id="txtJaminan" name="jaminan" type="number" class="form-control" min="0" required>
                         </div>
                     </div>
                     <div class="col-span-12 sm:col-span-6 auction-guarantee-deadline-field">
                         <label for="detBatasAkhirJaminan" class="form-label">Batas Akhir Jaminan</label>
                         <input id="detBatasAkhirJaminan" type="date" name="batas_akhir_jaminan" class="form-control"
-                            data-single-mode="true">
+                            data-single-mode="true" required>
                     </div>
                     <div class="col-span-12 sm:col-span-6">
                         <label for="detMulai" class="form-label">Mulai Lelang</label>
-                        <input id="detMulai" type="date" name="mulai" class="form-control" data-single-mode="true">
+                        <input id="detMulai" type="date" name="mulai" class="form-control" data-single-mode="true" required>
                     </div>
                     <div class="col-span-12 sm:col-span-6">
                         <label for="detSelesai" class="form-label">Selesai Lelang</label>
-                        <input id="detSelesai" type="date" name="selesai" class="form-control" data-single-mode="true">
+                        <input id="detSelesai" type="date" name="selesai" class="form-control" data-single-mode="true" required>
                     </div>
                     <div class="col-span-12 sm:col-span-6">
                         <label for="txtPenyelenggara" class="form-label">Penyelenggara</label>
-                        <input id="txtPenyelenggara" name="penyelenggara" type="text" class="form-control">
+                        <input id="txtPenyelenggara" name="penyelenggara" type="text" class="form-control" required>
                     </div>
                     <div class="col-span-12 sm:col-span-6">
                         <label for="txtKodeLot" class="form-label">Kode Lot</label>
-                        <input id="txtKodeLot" name="kode_lot" type="text" class="form-control">
+                        <input id="txtKodeLot" name="kode_lot" type="text" class="form-control" required>
                     </div>
                     {{-- <div class="col-span-12 sm:col-span-6">
                         <label for="txtUraian" class="form-label">Uraian</label>
@@ -221,60 +234,61 @@
                     </div> --}}
                     <div class="col-span-12 sm:col-span-6">
                         <label for="txtLampiran" class="form-label">Lampiran</label>
-                        <input id="txtLampiran" name="lampiran" type="text" class="form-control">
+                        <input id="txtLampiran" name="lampiran" type="text" class="form-control" required>
                     </div>
                     <div class="col-span-12 sm:col-span-6">
                         <label for="txtProvinsi" class="form-label">Provinsi</label>
-                        <input id="txtProvinsi" name="provinsi" type="text" class="form-control">
+                        <input id="txtProvinsi" name="provinsi" type="text" class="form-control" required>
                     </div>
                     <div class="col-span-12 sm:col-span-6">
                         <label for="txtKota" class="form-label">Kota</label>
-                        <input id="txtKota" name="kota" type="text" class="form-control">
+                        <input id="txtKota" name="kota" type="text" class="form-control" required>
                     </div>
                     @if ($isBprSms)
                     <div class="col-span-12 sm:col-span-6 sms-asset-only" style="display: none;">
                         <label for="txtLokasi" class="form-label">Lokasi Aset</label>
-                        <input id="txtLokasi" name="lokasi" type="text" class="form-control">
+                        <input id="txtLokasi" name="lokasi" type="text" class="form-control" required>
                     </div>
                     <div class="col-span-12 sm:col-span-6 sms-asset-only" style="display: none;">
                         <label for="txtLuasTanah" class="form-label">Luas Tanah</label>
-                        <input id="txtLuasTanah" name="luas_tanah" type="text" class="form-control" placeholder="Contoh: 120 m2">
+                        <input id="txtLuasTanah" name="luas_tanah" type="text" class="form-control" placeholder="Contoh: 120 m2" required>
                     </div>
                     <div class="col-span-12 sm:col-span-6 sms-asset-only" style="display: none;">
                         <label for="txtLuasBangunan" class="form-label">Luas Bangunan</label>
-                        <input id="txtLuasBangunan" name="luas_bangunan" type="text" class="form-control" placeholder="Contoh: 80 m2">
+                        <input id="txtLuasBangunan" name="luas_bangunan" type="text" class="form-control" placeholder="Contoh: 80 m2" required>
                     </div>
                     <div class="col-span-12 sm:col-span-6 sms-asset-only" style="display: none;">
                         <label for="txtLegalitas" class="form-label">Legalitas</label>
-                        <input id="txtLegalitas" name="legalitas" type="text" class="form-control" placeholder="Contoh: SHM / HGB">
+                        <input id="txtLegalitas" name="legalitas" type="text" class="form-control" placeholder="Contoh: SHM / HGB" required>
                     </div>
                     @endif
                     <div class="col-span-12 sm:col-span-6">
                         <label for="txtLink" class="form-label">Link</label>
-                        <input id="txtLink" name="link" type="text" class="form-control">
+                        <input id="txtLink" name="link" type="text" class="form-control" required>
                     </div>
                     <div class="col-span-12 sm:col-span-6">
                         <label for="filThumbnail" class="form-label">Thumbnail</label>
                         <input id="filThumbnail" accept="image/*" type="file" name="thumbnail" class="form-control"
-                            dat-showpreview="true">
+                            dat-showpreview="true" required>
                     </div>
                     <div class="col-span-12 sm:col-span-6">
                         <label for="filBanner" class="form-label">Banner</label>
                         <input id="filBanner" accept="image/*" type="file" name="banner" class="form-control"
-                            dat-showpreview="true">
+                            dat-showpreview="true" required>
                     </div>
                     @if ($isBprSms)
                     <div class="col-span-12 sms-asset-only" style="display: none;">
                         <label for="filAlbum" class="form-label">Album Foto / Gambar Aset</label>
-                        <input id="filAlbum" accept="image/jpeg,image/png,image/webp" type="file" name="album[]" class="form-control" multiple>
+                        <input id="filAlbum" accept="image/jpeg,image/png,image/webp" type="file" name="album[]" class="form-control" multiple required>
                         <div class="form-help mt-1">Pilih beberapa gambar untuk ditampilkan sebagai slider pada banner detail aset. Maksimal 2 MB per gambar.</div>
                     </div>
                     @endif
                     <div class="col-span-12">
                         <label for="txtUraian" class="form-label">Uraian Lengkap</label>
-                        <input type="hidden" name="uraian" id="txtUraianHidden">
+                        <input type="hidden" name="uraian" id="txtUraianHidden" required>
                         
                         <div id="editorUraian" class="bg-white" style="height: 300px;"></div>
+                        <div id="txtUraianError" class="text-danger mt-1 hidden">Uraian wajib diisi.</div>
                     </div>
 
                 </div>
@@ -282,7 +296,7 @@
                 <div class="modal-footer">
                     <button type="button" data-tw-dismiss="modal"
                         class="btn btn-outline-secondary w-20 mr-1">Cancel</button>
-                    <button type="submit" class="btn btn-primary w-20">Simpan</button>
+                    <button type="submit" class="btn btn-primary w-20" onclick="return validateLelangForm()">Simpan</button>
                 </div> <!-- END: Modal Footer -->
             </form>
         </div>
@@ -322,14 +336,23 @@ $(document).ready(function () {
         // Jika editor kosong (hanya ada tag p kosong), set null agar validasi DB bersih
         if (html === '<p><br></p>') html = '';
         $('#txtUraianHidden').val(html);
+        clearLelangUraianError();
     });
 
     inputmodal = tailwind.Modal.getOrCreateInstance(document.querySelector("#modalInputBanner"));
     $('#txtType').on('change', toggleAssetFields);
+    $('#slcTag, #slcKategori').on('change', clearLelangSelectErrors);
+    $('#editorUraian').on('click keyup', clearLelangUraianError);
     toggleAssetFields();
+
+    @if (session('open_lelang_modal'))
+    openinputmodal(null, true);
+    @endif
 });
 
 function toggleAssetFields() {
+    $('#filThumbnail, #filBanner').prop('required', !$('#txtId').val());
+
     if (!isBprSms) {
         return;
     }
@@ -339,19 +362,144 @@ function toggleAssetFields() {
     $('.auction-limit-field').toggle(!isAsset);
     $('.auction-guarantee-field').toggle(!isAsset);
     $('.auction-guarantee-deadline-field').toggle(!isAsset);
+    $('#txtHargaPenawaran').prop('required', isAsset);
+    $('#txtLimit, #txtJaminan, #detBatasAkhirJaminan').prop('required', !isAsset);
+    $('#txtLokasi, #txtLuasTanah, #txtLuasBangunan, #txtLegalitas, #filAlbum').prop('required', isAsset);
 }
 
-function openinputmodal(t) {
-    inputmodal.show();
-    
-    // Reset Form
-    $('#txtId').val(null);
+function normalizeSelectValues(values) {
+    if (typeof values === 'string') {
+        try {
+            values = JSON.parse(values);
+        } catch (error) {
+            values = [values];
+        }
+    }
+
+    if (!Array.isArray(values)) {
+        return [];
+    }
+
+    return values
+        .filter(value => value !== null && value !== undefined && value !== '')
+        .map(value => String(value));
+}
+
+function setLelangSelectValues(selector, values) {
+    const tomselect = document.querySelector(selector).tomselect;
+    const normalizedValues = normalizeSelectValues(values);
+
+    normalizedValues.forEach(value => {
+        if (!tomselect.options[value]) {
+            tomselect.addOption({ value: value, text: value });
+        }
+    });
+
+    tomselect.setValue(normalizedValues);
+}
+
+function resetLelangForm() {
+    const form = document.querySelector('#formLelang');
+
+    form.reset();
+    $('#txtId').val('');
+    $('#txtType').val('0');
+    $('#filThumbnail, #filBanner, #filAlbum').val('');
     $('#txtHargaPenawaran, #txtLokasi, #txtLuasTanah, #txtLuasBangunan, #txtLegalitas').val('');
-    quillUraian.setContents([]); // Mengosongkan editor
+    document.querySelector('#slcTag').tomselect.clear();
+    document.querySelector('#slcKategori').tomselect.clear();
+    quillUraian.setContents([]);
     $('#txtUraianHidden').val('');
     $('.showpreviewfile_0_0').remove();
     $('.showpreviewfile_1_0').remove();
     $('.showpreviewalbum').remove();
+    clearLelangSelectErrors();
+    toggleAssetFields();
+}
+
+function restoreOldLelangInput() {
+    $('#txtId').val(@json(old('txtId')));
+    $('#txtUrutan').val(@json(old('urutan')));
+    $('#txtType').val(@json(old('type', '0'))).trigger('change');
+    setLelangSelectValues('#slcTag', @json(old('tag', [])));
+    setLelangSelectValues('#slcKategori', @json(old('kategori', [])));
+    $('#txtTitle').val(@json(old('title')));
+    $('#txtLimit').val(@json(old('limit')));
+    $('#txtHargaPenawaran').val(@json(old('harga_penawaran')));
+    $('#txtCaraPenawaran').val(@json(old('cara_penawaran', '0')));
+    $('#txtJaminan').val(@json(old('jaminan')));
+    $('#detBatasAkhirJaminan').val(@json(old('batas_akhir_jaminan')));
+    $('#detMulai').val(@json(old('mulai')));
+    $('#detSelesai').val(@json(old('selesai')));
+    $('#txtPenyelenggara').val(@json(old('penyelenggara')));
+    $('#txtKodeLot').val(@json(old('kode_lot')));
+    $('#txtLampiran').val(@json(old('lampiran')));
+    $('#txtProvinsi').val(@json(old('provinsi')));
+    $('#txtKota').val(@json(old('kota')));
+    $('#txtLokasi').val(@json(old('lokasi')));
+    $('#txtLuasTanah').val(@json(old('luas_tanah')));
+    $('#txtLuasBangunan').val(@json(old('luas_bangunan')));
+    $('#txtLegalitas').val(@json(old('legalitas')));
+    $('#txtLink').val(@json(old('link')));
+
+    const uraian = @json(old('uraian', ''));
+    quillUraian.root.innerHTML = uraian || '<p><br></p>';
+    $('#txtUraianHidden').val(uraian);
+    toggleAssetFields();
+}
+
+function clearLelangSelectErrors() {
+    $('#slcTagError, #slcKategoriError').text('').addClass('hidden');
+}
+
+function clearLelangUraianError() {
+    $('#txtUraianError').addClass('hidden');
+}
+
+function validateLelangSelects() {
+    let valid = true;
+    clearLelangSelectErrors();
+
+    if (!document.querySelector('#slcTag').tomselect.items.length) {
+        $('#slcTagError').text('Tag wajib diisi.').removeClass('hidden');
+        valid = false;
+    }
+
+    if (!document.querySelector('#slcKategori').tomselect.items.length) {
+        $('#slcKategoriError').text('Kategori wajib diisi.').removeClass('hidden');
+        valid = false;
+    }
+
+    if (!valid) {
+        const firstEmpty = !document.querySelector('#slcTag').tomselect.items.length
+            ? document.querySelector('#slcTag').tomselect
+            : document.querySelector('#slcKategori').tomselect;
+        firstEmpty.focus();
+    }
+
+    return valid;
+}
+
+function validateLelangForm() {
+    const selectsValid = validateLelangSelects();
+    const uraianValid = quillUraian.getText().trim().length > 0;
+
+    clearLelangUraianError();
+
+    if (!uraianValid) {
+        $('#txtUraianError').removeClass('hidden');
+        quillUraian.focus();
+    }
+
+    return selectsValid && uraianValid;
+}
+
+function openinputmodal(t, restoreOld = false) {
+    resetLelangForm();
+
+    if (restoreOld) {
+        restoreOldLelangInput();
+    }
 
     if (t) {
         $('#txtId').val(t.id);
@@ -365,8 +513,8 @@ function openinputmodal(t) {
         }
 
         // ... kode assignment lainnya (title, limit, tag, dll) ...
-        document.querySelector('#slcTag').tomselect.setValue(t.tags);
-        document.querySelector('#slcKategori').tomselect.setValue(t.kategoris);
+        setLelangSelectValues('#slcTag', Array.isArray(t.tags) && t.tags.length ? t.tags : t.tag);
+        setLelangSelectValues('#slcKategori', Array.isArray(t.kategoris) && t.kategoris.length ? t.kategoris : t.kategori);
         $('#txtTitle').val(t.title);
         $('#txtLimit').val(t.limit);
         $('#txtHargaPenawaran').val(t.harga_penawaran || '');
@@ -401,6 +549,7 @@ function openinputmodal(t) {
     }
 
     toggleAssetFields();
+    inputmodal.show();
 }
 </script>
 @endsection
