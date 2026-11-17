@@ -1,13 +1,13 @@
 <?php
 
 use App\Http\Middleware\AdminrMiddleware;
-use App\Http\Middleware\RegistrasiAuth;
+use App\Http\Middleware\CountVisitor;
+use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\UserMiddleware;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\CountVisitor;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
+        $middleware->append(SecurityHeaders::class);
         $middleware->append(CountVisitor::class);
         $middleware->alias([
             'auth' => Authenticate::class,
@@ -25,7 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => AdminrMiddleware::class,
             // 'user' => UserMiddleware::class,
         ]);
-        
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

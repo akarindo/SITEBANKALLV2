@@ -128,19 +128,14 @@
     </body>
     <script>
         function customRound(number) {
-            const last2 = String(Math.round(number)).slice(-2);
-            const val = Number(last2);
-            if (val === 0) return Math.round(number);
-
-            if (val <= 50) return Math.round(number) - val + 50;
-            else return Math.round(number) - val + 100;
+            return Math.round(number);
         }
 
-        // FORMAT RUPIAH + 2 DESIMAL
+        // FORMAT RUPIAH TANPA DESIMAL
         function formatRupiah(num) {
             return Number(num).toLocaleString("id-ID", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
             });
         }
 
@@ -184,9 +179,9 @@
             html += `
         <tr style="text-align:center; background:white; border-bottom:1px solid #eee;">
             <td style="padding:10px 8px; font-size:14px;">-</td>
-            <td style="padding:10px 8px; font-size:14px;">Rp.0,00</td>
-            <td style="padding:10px 8px; font-size:14px;">Rp.0,00</td>
-            <td style="padding:10px 8px; font-size:14px;">Rp.0,00</td>
+            <td style="padding:10px 8px; font-size:14px;">Rp.0</td>
+            <td style="padding:10px 8px; font-size:14px;">Rp.0</td>
+            <td style="padding:10px 8px; font-size:14px;">Rp.0</td>
             <td style="padding:10px 8px; font-size:14px;">Rp.${formatRupiah(plafon)}</td>
         </tr>
     `;
@@ -200,20 +195,15 @@
 
                 let bungaFlat = plafon * bungaPerBulan;
                 let pokokTetap = plafon / tenor;
-                let lastPokok = 0;
 
                 for (let i = 1; i <= tenor; i++) {
 
                     let pokok = customRound(pokokTetap);
                     let bunga = customRound(bungaFlat);
+                    if (i === tenor) pokok = customRound(baki);
                     let total = customRound(pokok + bunga);
 
-                    baki -= pokok;
-                    if (baki < 0) baki = 0;
-
-                    // koreksi tenor terakhir
-                    if (i === tenor - 1) lastPokok = baki;
-                    if (i === tenor) pokok = lastPokok;
+                    baki = customRound(Math.max(0, baki - pokok));
 
                     html += `
                 <tr style="text-align:center; background:white; border-bottom:1px solid #eee;">
@@ -241,33 +231,31 @@
                 let A = (plafon * bungaPerBulan) / (1 - Math.pow(1 + bungaPerBulan, -tenor));
                 A = customRound(A);
 
-                let lastPokok = 0;
-
                 for (let i = 1; i <= tenor; i++) {
 
                     let bunga = customRound(baki * bungaPerBulan);
                     let pokok = customRound(A - bunga);
+                    let total = A;
+                    if (i === tenor) {
+                        pokok = customRound(baki);
+                        total = customRound(pokok + bunga);
+                    }
 
-                    baki -= pokok;
-                    if (baki < 0) baki = 0;
-
-                    // koreksi tenor terakhir
-                    if (i === tenor - 1) lastPokok = baki;
-                    if (i === tenor) pokok = lastPokok;
+                    baki = customRound(Math.max(0, baki - pokok));
 
                     html += `
                 <tr style="text-align:center; background:white; border-bottom:1px solid #eee;">
                     <td style="padding:10px 8px; font-size:14px;">${i}</td>
                     <td style="padding:10px 8px; font-size:14px;">Rp.${formatRupiah(pokok)}</td>
                     <td style="padding:10px 8px; font-size:14px;">Rp.${formatRupiah(bunga)}</td>
-                    <td style="padding:10px 8px; font-size:14px;">Rp.${formatRupiah(A)}</td>
+                    <td style="padding:10px 8px; font-size:14px;">Rp.${formatRupiah(total)}</td>
                     <td style="padding:10px 8px; font-size:14px;">Rp.${formatRupiah(baki)}</td>
                 </tr>
             `;
 
                     totalPokok += pokok;
                     totalBunga += bunga;
-                    totalAngsuran += A;
+                    totalAngsuran += total;
                 }
             }
 

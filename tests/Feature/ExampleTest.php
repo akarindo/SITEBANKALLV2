@@ -15,5 +15,7 @@ class ExampleTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
+        $response->assertHeader('X-Frame-Options', 'DENY');
+        $response->assertHeader('Content-Security-Policy', "frame-ancestors 'none'");
     }
 }
