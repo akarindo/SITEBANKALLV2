@@ -294,10 +294,6 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    #otp_code {
-        letter-spacing: 0.5em;
-        font-family: monospace;
-    }
 </style>
 
 
@@ -375,171 +371,6 @@ Jika terdapat oknum yang meminta imbalan/gratifikasi dengan mengatasnamakan BPR 
 
 
 
-    <!--===== MODAL AUTHENTICATION =====-->
-    <div class="modal fade" id="modalAuth" tabindex="-1" role="dialog" aria-labelledby="modalAuthLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
-            <div class="modal-content border-0 shadow-lg">
-                <div class="modal-header bg-gradient-primary text-white border-0 py-4">
-                    <h5 class="modal-title"><i class="fas fa-user-lock mr-2"></i> Masuk / Daftar</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        style="font-size: 15px;"></button>
-                </div>
-
-                <div class="modal-body p-4">
-                    <!-- Step Indicator -->
-                    <div class="step-indicator mb-4">
-                        <div class="step active" id="step1">
-                            <div class="step-number">1</div>
-                            <div class="step-label">Login / Daftar</div>
-                            <div class="step-line"></div>
-                        </div>
-                        <div class="step" id="step2">
-                            <div class="step-number">2</div>
-                            <div class="step-label">Verifikasi OTP</div>
-                            <div class="step-line"></div>
-                        </div>
-                        <div class="step" id="step3">
-                            <div class="step-number">3</div>
-                            <div class="step-label">Form Pengaduan</div>
-                        </div>
-                    </div>
-
-                    <!-- Tab panes -->
-                    <div class="tab-content pt-3">
-                        <!-- LOGIN -->
-                        <div class="tab-pane active" id="loginTab" role="tabpanel">
-                            <form id="formLoginxx" method="POST" action="{{ route('login') }}">
-                                @csrf
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control rounded-pill" id="login_identifier"
-                                        name="email" placeholder="Email / Nomor HP" required>
-                                    <label for="login_identifier">Email / Nomor HP</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <input type="password" class="form-control rounded-pill" id="login_password"
-                                        name="password" placeholder="Password" required>
-                                    <label for="login_password">Password</label>
-                                </div>
-                                <div id="login_errors" class="text-danger mb-3 px-3" style="display:none"></div>
-
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary rounded-pill py-2" id="btnLoginx">
-                                        <i class="fas fa-sign-in-alt me-2"></i>Masuk
-                                    </button>
-                                </div>
-                            </form>
-
-                            <div class="text-center mt-4">
-                                <p class="mb-0">Belum punya akun? <a href="#" id="showRegister"
-                                        class="text-decoration-none fw-bold">Daftar sekarang</a></p>
-                            </div>
-                        </div>
-
-                        <!-- REGISTER -->
-                        <div class="tab-pane" id="registerTab" role="tabpanel">
-                            <form id="formRegister" method="POST" action="{{ route('register.process') }}">
-                                @csrf
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control rounded-pill" id="reg_name" name="name"
-                                        placeholder="Nama Lengkap" required>
-                                    <label for="reg_name">Nama Lengkap</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <input type="email" class="form-control rounded-pill" id="reg_email" name="email"
-                                        placeholder="Email" required>
-                                    <label for="reg_email">Email</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control rounded-pill" id="reg_phone" name="phone"
-                                        placeholder="Nomor HP" required>
-                                    <label for="reg_phone">Nomor HP</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <textarea class="form-control rounded-3" id="reg_alamat" name="alamat"
-                                        placeholder="Alamat" required style="height: 100px"></textarea>
-                                    <label for="reg_alamat">Alamat</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <input type="password" class="form-control rounded-pill" id="reg_password"
-                                        name="password" placeholder="Password" required>
-                                    <label for="reg_password">Password</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <input type="password" class="form-control rounded-pill"
-                                        id="reg_password_confirmation" name="password_confirmation"
-                                        placeholder="Konfirmasi Password" required>
-                                    <label for="reg_password_confirmation">Konfirmasi Password</label>
-                                </div>
-                                <div id="reg_errors" class="text-danger mb-3 px-3" style="display:none"></div>
-
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-success rounded-pill py-2" id="btnRegister">
-                                        <i class="fas fa-user-plus me-2"></i>Daftar
-                                    </button>
-                                </div>
-                            </form>
-
-                            <div class="text-center mt-4">
-                                <p class="mb-0">Sudah punya akun? <a href="#" id="showLogin"
-                                        class="text-decoration-none fw-bold">Masuk</a></p>
-                            </div>
-                        </div>
-
-                        <!-- OTP VERIFICATION -->
-                        <div class="tab-pane" id="otpTab" role="tabpanel">
-                            <div class="text-center mb-4 p-3 bg-light rounded-3">
-                                <i class="fas fa-envelope-open-text fa-3x text-primary mb-3"></i>
-                                <p class="mb-2">Kami telah mengirim kode OTP ke email Anda.</p>
-                                <p>Silakan masukkan kode tersebut di bawah ini:</p>
-                                <p class="font-weight-bold" id="otpEmail"></p>
-                            </div>
-
-                            <form id="formOtp">
-                                <!-- OTP Input - Centered -->
-                                <div class="text-center mb-3">
-                                    <div class="d-inline-block" style="width: 300px;">
-                                        <input type="text" class="form-control text-center fs-5 fw-bold rounded-pill"
-                                            id="otp_code" placeholder="Masukkan 6 digit kode OTP" maxlength="6" required
-                                            style="letter-spacing: 0.5em; font-family: monospace; text-align: center;">
-                                        <label for="otp_code" class="text-center w-100" style="margin-left: -12px;">Kode
-                                            OTP</label>
-                                    </div>
-                                </div>
-                                <div id="otp_errors" class="text-danger mb-3 px-3 text-center" style="display:none">
-                                </div>
-
-                                <!-- Buttons - Centered -->
-                                <div class="text-center mt-4">
-                                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4 mx-2"
-                                        id="btnResendOtp">
-                                        <i class="fas fa-redo me-2"></i>Kirim Ulang OTP
-                                    </button>
-                                    <button type="submit" class="btn btn-primary rounded-pill px-4 mx-2"
-                                        id="btnVerifyOtp">
-                                        <i class="fas fa-check-circle me-2"></i>Verifikasi
-                                    </button>
-                                </div>
-                            </form>
-
-                            <div class="text-center mt-4">
-                                <p class="mb-0">Tidak menerima email? Periksa folder spam atau <a href="#"
-                                        id="btnResendOtpLink" class="text-decoration-none fw-bold">kirim ulang OTP</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer bg-light border-0 py-3">
-                    <small class="text-muted"><i class="fas fa-info-circle me-1"></i>Setelah masuk, Anda akan
-                        diarahkan kembali ke form pengaduan.</small>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
     <!--===== MODAL FORM PENGADUAN =====-->
     <div class="modal fade" id="modalFormAduan" tabindex="-1" role="dialog" aria-labelledby="modalFormAduanLabel"
         aria-hidden="true">
@@ -556,6 +387,27 @@ Jika terdapat oknum yang meminta imbalan/gratifikasi dengan mengatasnamakan BPR 
                     </div>
 
                     <div class="modal-body p-4">
+                        <div class="card border-info mb-4">
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold text-info"><i class="fas fa-user me-2"></i>Identitas Pelapor</h6>
+                                <p class="text-muted small">Pengaduan dapat dikirim tanpa membuat akun. Mohon isi data berikut agar kami dapat menghubungi Anda.</p>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="nama_pelapor" class="form-label fw-semibold">Nama Lengkap</label>
+                                        <input type="text" name="nama_pelapor" id="nama_pelapor" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="email_pelapor" class="form-label fw-semibold">Email</label>
+                                        <input type="email" name="email_pelapor" id="email_pelapor" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="no_hp_pelapor" class="form-label fw-semibold">No. HP</label>
+                                        <input type="tel" name="no_hp_pelapor" id="no_hp_pelapor" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Bagian Pemilih Jenis Aduan -->
                         <div class="card mb-4">
                             <div class="card-body">
@@ -777,255 +629,10 @@ Jika terdapat oknum yang meminta imbalan/gratifikasi dengan mengatasnamakan BPR 
 
 <script>
     $(document).ready(function() {
-            let currentUser = null;
-
-            // Event listener untuk tombol pengaduan
+            // Pengaduan BPR JAS dapat dikirim langsung tanpa autentikasi.
             $('#btnPengaduan').click(function(e) {
                 e.preventDefault();
-                $.ajax({
-                    url: '/api/check-auth',
-                    method: 'GET',
-                    success: function(response) {
-                        if (response.authenticated) {
-                            $('#modalFormAduan').modal('show');
-                        } else {
-                            $('#modalAuth').modal('show');
-                            resetSteps();
-                            showLoginTab();
-                        }
-                    },
-                    error: function() {
-                        $('#modalAuth').modal('show');
-                        resetSteps();
-                        showLoginTab();
-                    }
-                });
-            });
-
-            // JavaScript untuk login, register, OTP tetap sama
-
-            // Toggle antara login dan register
-            $('#showRegister').click(function(e) {
-                e.preventDefault();
-                showRegisterTab();
-            });
-
-            $('#showLogin').click(function(e) {
-                e.preventDefault();
-                showLoginTab();
-            });
-
-            // Fungsi untuk menampilkan tab login
-            function showLoginTab() {
-                $('#loginTab').addClass('active');
-                $('#registerTab').removeClass('active');
-                $('#otpTab').removeClass('active');
-                updateStepIndicator(1);
-            }
-
-            // Fungsi untuk menampilkan tab register
-            function showRegisterTab() {
-                $('#loginTab').removeClass('active');
-                $('#registerTab').addClass('active');
-                $('#otpTab').removeClass('active');
-                updateStepIndicator(1);
-            }
-
-            // Fungsi untuk menampilkan tab OTP
-            function showOtpTab(email) {
-                $('#loginTab').removeClass('active');
-                $('#registerTab').removeClass('active');
-                $('#otpTab').addClass('active');
-                $('#otpEmail').text(email);
-                updateStepIndicator(2);
-            }
-
-            // Fungsi untuk update step indicator
-            function updateStepIndicator(step) {
-                $('.step').removeClass('active completed');
-
-                for (let i = 1; i <= step; i++) {
-                    if (i < step) {
-                        $('#step' + i).addClass('completed');
-                    } else {
-                        $('#step' + i).addClass('active');
-                    }
-                }
-            }
-
-            // Fungsi untuk reset step indicator
-            function resetSteps() {
-                $('.step').removeClass('active completed');
-                $('#step1').addClass('active');
-            }
-
-            // Proses login
-            $('#formLogin').on('submit', function(e) {
-                e.preventDefault();
-                $('#login_errors').hide().text('');
-                $('#btnLogin').prop('disabled', true).text('Proses...');
-                return $('#formLogin').submit();
-                $.ajax({
-                    url: $(this).attr('action'),
-                    method: 'POST',
-                    data: $(this).serialize(),
-                    dataType: 'json'
-                }).done(function(response) {
-                    if (response.success) {
-                        // Login berhasil, simpan user data
-                        currentUser = response.user;
-
-                        // Cek apakah email sudah diverifikasi
-                        if (response.user.email_verified_at) {
-                            // Email sudah diverifikasi, buka form pengaduan
-                            $('#modalAuth').modal('hide');
-                            $('#modalFormAduan').modal('show');
-                            updateStepIndicator(3);
-                        } else {
-                            // Email belum diverifikasi, kirim OTP dan tampilkan tab OTP
-                            sendOtp(response.user.email);
-                            showOtpTab(response.user.email);
-                        }
-                    } else {
-                        // Login gagal
-                        $('#login_errors').show().text(response.message ||
-                            'Login gagal. Periksa kredensial Anda.');
-                    }
-                }).fail(function(xhr) {
-                    let errorMessage = 'Terjadi kesalahan. Coba lagi.';
-
-                    if (xhr.responseJSON) {
-                        if (xhr.responseJSON.errors) {
-                            const errors = xhr.responseJSON.errors;
-                            errorMessage = Object.values(errors).flat().join(' ');
-                        } else if (xhr.responseJSON.message) {
-                            errorMessage = xhr.responseJSON.message;
-                        }
-                    }
-
-                    $('#login_errors').show().text(errorMessage);
-                }).always(function() {
-                    $('#btnLogin').prop('disabled', false).text('Masuk');
-                });
-            });
-
-            // Proses register
-            $('#formRegister').on('submit', function(e) {
-                e.preventDefault();
-                $('#reg_errors').hide().text('');
-                $('#btnRegister').prop('disabled', true).text('Proses...');
-
-                $.ajax({
-                    url: $(this).attr('action'),
-                    method: 'POST',
-                    data: $(this).serialize(),
-                    dataType: 'json'
-                }).done(function(response) {
-                    if (response.success) {
-                        // Register berhasil, kirim OTP dan tampilkan tab OTP
-                        sendOtp(response.user.email);
-                        showOtpTab(response.user.email);
-                    } else {
-                        // Register gagal
-                        $('#reg_errors').show().text(response.message || 'Pendaftaran gagal.');
-                    }
-                }).fail(function(xhr) {
-                    let errorMessage = 'Terjadi kesalahan. Coba lagi.';
-
-                    if (xhr.responseJSON) {
-                        if (xhr.responseJSON.errors) {
-                            const errors = xhr.responseJSON.errors;
-                            errorMessage = Object.values(errors).flat().join(' ');
-                        } else if (xhr.responseJSON.message) {
-                            errorMessage = xhr.responseJSON.message;
-                        }
-                    }
-
-                    $('#reg_errors').show().text(errorMessage);
-                }).always(function() {
-                    $('#btnRegister').prop('disabled', false).text('Daftar');
-                });
-            });
-
-            // Fungsi untuk mengirim OTP
-            function sendOtp(email) {
-                $.ajax({
-                    url: '/api/send-otp',
-                    method: 'POST',
-                    data: {
-                        email: email,
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    dataType: 'json'
-                }).done(function(response) {
-                    if (!response.success) {
-                        alert('Gagal mengirim OTP: ' + response.message);
-                    }
-                }).fail(function() {
-                    alert('Terjadi kesalahan saat mengirim OTP');
-                });
-            }
-
-            // Proses verifikasi OTP
-            $('#formOtp').on('submit', function(e) {
-                e.preventDefault();
-                $('#otp_errors').hide().text('');
-                $('#btnVerifyOtp').prop('disabled', true).text('Verifikasi...');
-
-                $.ajax({
-                    url: '/api/verify-otp',
-                    method: 'POST',
-                    data: {
-                        email: $('#otpEmail').text(),
-                        otp_code: $('#otp_code').val(),
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    dataType: 'json'
-                }).done(function(response) {
-                    if (response.success) {
-                        // OTP berhasil diverifikasi
-                        updateStepIndicator(3);
-
-                        // Tunggu sebentar sebelum membuka form pengaduan
-                        setTimeout(function() {
-                            $('#modalAuth').modal('hide');
-                            $('#modalFormAduan').modal('show');
-                        }, 1000);
-                    } else {
-                        // OTP gagal diverifikasi
-                        $('#otp_errors').show().text(response.message || 'Kode OTP tidak valid.');
-                    }
-                }).fail(function(xhr) {
-                    let errorMessage = 'Terjadi kesalahan. Coba lagi.';
-
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
-                    }
-
-                    $('#otp_errors').show().text(errorMessage);
-                }).always(function() {
-                    $('#btnVerifyOtp').prop('disabled', false).text('Verifikasi');
-                });
-            });
-
-            // Kirim ulang OTP
-            $('#btnResendOtp, #btnResendOtpLink').click(function(e) {
-                e.preventDefault();
-
-                const email = $('#otpEmail').text();
-                if (email) {
-                    sendOtp(email);
-
-                    // Tampilkan notifikasi
-                    const toast = $('<div class="toast-notification">OTP telah dikirim ulang ke ' + email +
-                        '</div>');
-                    $('body').append(toast);
-
-                    // Hilangkan notifikasi setelah 3 detik
-                    setTimeout(function() {
-                        toast.remove();
-                    }, 3000);
-                }
+                $('#modalFormAduan').modal('show');
             });
 
             // Proses pengiriman form pengaduan

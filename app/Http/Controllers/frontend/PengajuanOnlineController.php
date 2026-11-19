@@ -48,15 +48,58 @@ class PengajuanOnlineController extends Controller
 
     public function savedata(Request $request)
     {
+        $isEleskaCredit = config('subdomain.FORMPENGAJUANKREDIT') === 'frontend.bpreleska.pages.pengajuanonline.formkredit'
+            && $request->input('jenis_pengajuan') === 'kredit';
+
         // Validasi umum (semua form)
-        $request->validate([
+        $rules = [
             'jenis_pengajuan' => 'required',
             'nm_lengkap' => 'required',
             'no_ktp' => 'required',
             'no_hp' => 'required',
-            'email' => 'required',
+            'email' => 'required|email',
             'alamat' => 'required',
-        ]);
+        ];
+
+        if ($isEleskaCredit) {
+            $rules += [
+                'permohonan_kredit' => 'required|in:Permohonan Baru,Top Up,Restruk',
+                'tempat_tgl_lahir' => 'required|string|max:255',
+                'status_pernikahan' => 'required|string|max:50',
+                'pendidikan_tertinggi' => 'required|string|max:50',
+                'status_rumah_tinggal' => 'required|string|max:100',
+                'lama_domisili_tahun' => 'required|integer|min:0',
+                'lama_domisili_bulan' => 'required|integer|min:0|max:11',
+                'nama_ibu_kandung' => 'required|string|max:255',
+                'nama_pendamping' => 'required|string|max:255',
+                'tempat_tgl_lahir_pendamping' => 'required|string|max:255',
+                'no_ktp_pendamping' => 'required|digits:16',
+                'pekerjaan_pendamping' => 'required|string|max:255',
+                'penghasilan_pendamping' => 'required|numeric|min:0',
+                'no_hp_pendamping' => 'required|string|max:15',
+                'nama_tempat_usaha' => 'required|string|max:255',
+                'bidang_usaha_lama_usaha' => 'required|string|max:255',
+                'alamat_tempat_usaha' => 'required|string|max:1000',
+                'no_tlp_perusahaan' => 'required|string|max:30',
+                'penjualan_pendapatan' => 'required|numeric|min:0',
+                'jumlah_tanggungan' => 'required|integer|min:0',
+                'modal_per_bulan' => 'required|numeric|min:0',
+                'pendapatan_lainnya' => 'required|numeric|min:0',
+                'biaya_usaha_per_bulan' => 'required|numeric|min:0',
+                'kesanggupan_angsuran' => 'required|numeric|min:0',
+                'laba_usaha_per_bulan' => 'required|numeric|min:0',
+                'jml_kredit' => 'required|numeric|min:0',
+                'jngka_wkt' => 'required|integer|min:1',
+                'tujuan_penggunaan_kredit' => 'required|string|max:1000',
+                'agunan_1' => 'required|string|max:1000',
+                'agunan_2' => 'required|string|max:1000',
+                'lampiran' => 'nullable|array',
+                'lampiran.*' => 'string|max:255',
+                'menyetujui_pernyataan' => 'required|accepted',
+            ];
+        }
+
+        $request->validate($rules);
 
         // Data dasar (dipakai semua)
         $data = [
@@ -64,7 +107,7 @@ class PengajuanOnlineController extends Controller
             'nm_lengkap' => $request->nm_lengkap,
             'no_ktp' => $request->no_ktp,
             'no_hp' => $request->no_hp,
-            'email' => $request->email,
+            'email' => $request->input('email'),
             'alamat' => $request->alamat,
             'jenis_pengajuan' => $request->jenis_pengajuan,
         ];
@@ -73,14 +116,49 @@ class PengajuanOnlineController extends Controller
         if ($request->jenis_pengajuan == 'kredit') {
             $data += [
 
-                'pekerjaan' => $request->pekerjaan,
-                'penghasilan' => $request->penghasilan,
+                'pekerjaan' => $isEleskaCredit ? $request->bidang_usaha_lama_usaha : $request->pekerjaan,
+                'penghasilan' => $isEleskaCredit ? $request->laba_usaha_per_bulan : $request->penghasilan,
                 'alamat' => $request->alamat,
                 'jns_kredit' => $request->jns_kredit,
                 'jml_kredit' => $request->jml_kredit,
                 'jngka_wkt' => $request->jngka_wkt,
-                'tujuan_kredit' => $request->tujuan_kredit,
+                'tujuan_kredit' => $isEleskaCredit ? $request->tujuan_penggunaan_kredit : $request->tujuan_kredit,
             ];
+
+            if ($isEleskaCredit) {
+                $data += [
+                    'permohonan_kredit' => $request->permohonan_kredit,
+                    'tempat_tgl_lahir' => $request->tempat_tgl_lahir,
+                    'status_pernikahan' => $request->status_pernikahan,
+                    'pendidikan_tertinggi' => $request->pendidikan_tertinggi,
+                    'status_rumah_tinggal' => $request->status_rumah_tinggal,
+                    'lama_domisili_tahun' => $request->lama_domisili_tahun,
+                    'lama_domisili_bulan' => $request->lama_domisili_bulan,
+                    'nama_ibu_kandung' => $request->nama_ibu_kandung,
+                    'nama_pendamping' => $request->nama_pendamping,
+                    'tempat_tgl_lahir_pendamping' => $request->tempat_tgl_lahir_pendamping,
+                    'no_ktp_pendamping' => $request->no_ktp_pendamping,
+                    'pekerjaan_pendamping' => $request->pekerjaan_pendamping,
+                    'penghasilan_pendamping' => $request->penghasilan_pendamping,
+                    'no_hp_pendamping' => $request->no_hp_pendamping,
+                    'nama_tempat_usaha' => $request->nama_tempat_usaha,
+                    'bidang_usaha_lama_usaha' => $request->bidang_usaha_lama_usaha,
+                    'alamat_tempat_usaha' => $request->alamat_tempat_usaha,
+                    'no_tlp_perusahaan' => $request->no_tlp_perusahaan,
+                    'penjualan_pendapatan' => $request->penjualan_pendapatan,
+                    'jumlah_tanggungan' => $request->jumlah_tanggungan,
+                    'modal_per_bulan' => $request->modal_per_bulan,
+                    'pendapatan_lainnya' => $request->pendapatan_lainnya,
+                    'biaya_usaha_per_bulan' => $request->biaya_usaha_per_bulan,
+                    'kesanggupan_angsuran' => $request->kesanggupan_angsuran,
+                    'laba_usaha_per_bulan' => $request->laba_usaha_per_bulan,
+                    'tujuan_penggunaan_kredit' => $request->tujuan_penggunaan_kredit,
+                    'agunan_1' => $request->agunan_1,
+                    'agunan_2' => $request->agunan_2,
+                    'lampiran' => json_encode($request->input('lampiran', [])),
+                    'menyetujui_pernyataan' => true,
+                ];
+            }
         }
 
         // KHUSUS TABUNGAN
@@ -247,8 +325,11 @@ class PengajuanOnlineController extends Controller
     public function downloadformkredit($id)
     {
         $data = PengajuanModel::with('masterKredit')->findOrFail($id);
+        $view = config('subdomain.FORMPENGAJUANKREDIT') === 'frontend.bpreleska.pages.pengajuanonline.formkredit'
+            ? 'frontend.bpreleska.pages.pengajuanonline.pdfkredit'
+            : 'frontend.bprtaruna.pages.pengajuanonline.pdfkredit';
 
-        $pdf = Pdf::loadView('frontend.bprtaruna.pages.pengajuanonline.pdfkredit', compact('data'));
+        $pdf = Pdf::loadView($view, compact('data'));
 
         return $pdf->stream('pengajuan_kredit' . $data->id . '.pdf');
     }

@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Mail;
 
 class PengaduanController extends Controller
 {
-
     public function index()
     {
 
@@ -30,6 +29,7 @@ class PengaduanController extends Controller
     public function getSub($form)
     {
         $data = MasterJenisPengaduanModel::where('form', $form)->get();
+
         return response()->json($data);
     }
 
@@ -39,13 +39,13 @@ class PengaduanController extends Controller
             if (Auth::user()->role == 1) {
                 return response()->json([
                     'authenticated' => true,
-                    'user' => Auth::user()
+                    'user' => Auth::user(),
                 ]);
             }
         }
 
         return response()->json([
-            'authenticated' => false
+            'authenticated' => false,
         ]);
     }
 
@@ -55,7 +55,7 @@ class PengaduanController extends Controller
     public function sendOtp(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|exists:users,email'
+            'email' => 'required|email|exists:users,email',
         ]);
 
         $user = User::where('email', $request->email)->first();
@@ -78,16 +78,16 @@ class PengaduanController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'OTP has been sent to your email',
-                'debug' => 'Email sent to: ' . $user->email . ' with OTP: ' . $otpCode
+                'debug' => 'Email sent to: '.$user->email.' with OTP: '.$otpCode,
             ]);
         } catch (\Exception $e) {
             // Log error for debugging
-            \Log::error('Email sending failed: ' . $e->getMessage());
+            \Log::error('Email sending failed: '.$e->getMessage());
 
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to send OTP: ' . $e->getMessage(),
-                'debug' => 'Failed to send email to: ' . $user->email . ' with OTP: ' . $otpCode
+                'message' => 'Failed to send OTP: '.$e->getMessage(),
+                'debug' => 'Failed to send email to: '.$user->email.' with OTP: '.$otpCode,
             ]);
         }
     }
@@ -99,7 +99,7 @@ class PengaduanController extends Controller
     {
         $request->validate([
             'email' => 'required|email|exists:users,email',
-            'otp_code' => 'required|numeric|digits:6'
+            'otp_code' => 'required|numeric|digits:6',
         ]);
 
         $user = User::where('email', $request->email)->first();
@@ -111,11 +111,11 @@ class PengaduanController extends Controller
             ->whereNull('used_at')
             ->first();
 
-        if (!$otp) {
+        if (! $otp) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid or expired OTP code',
-                'debug' => 'No valid OTP found for: ' . $request->email . ' with code: ' . $request->otp_code
+                'debug' => 'No valid OTP found for: '.$request->email.' with code: '.$request->otp_code,
             ]);
         }
 
@@ -133,7 +133,7 @@ class PengaduanController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Email verified successfully',
-            'debug' => 'User ' . $user->email . ' verified successfully'
+            'debug' => 'User '.$user->email.' verified successfully',
         ]);
     }
 
@@ -142,10 +142,16 @@ class PengaduanController extends Controller
      */
     public function store(Request $request)
     {
+        $isPublicBprjas = config('subdomain.GLOBAL_PENGADUAN') ===
+            'frontend.bprjas.pages.pengaduan.pengaduan' && ! Auth::check();
+        $identityRule = $isPublicBprjas ? 'required' : 'nullable';
 
         $request->validate([
             'jenis_aduan' => 'required|in:1,2',
-            'sub_aduan' => 'required'
+            'sub_aduan' => 'required',
+            'nama_pelapor' => [$identityRule, 'string', 'max:255'],
+            'email_pelapor' => [$identityRule, 'email', 'max:255'],
+            'no_hp_pelapor' => [$identityRule, 'string', 'max:30'],
         ]);
 
         $nama = $lokasi = $uraian = $rugi = null;
@@ -154,7 +160,6 @@ class PengaduanController extends Controller
 
         $bukti1_input = null;
         $bukti2_input = null;
-
 
         if ($request->jenis_aduan == 1) {
 
@@ -167,7 +172,7 @@ class PengaduanController extends Controller
                 'jbt_plg' => 'nullable',
                 'waktu_plg' => 'nullable',
                 'bukti1.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-                'bukti2.*' => 'nullable|file|mimes:mp3,wav,mp4,mov|max:50240'
+                'bukti2.*' => 'nullable|file|mimes:mp3,wav,mp4,mov|max:50240',
             ]);
 
             $nama = $request->nama;
@@ -182,7 +187,6 @@ class PengaduanController extends Controller
             $bukti2_input = 'bukti2';
         }
 
-
         if ($request->jenis_aduan == 2) {
 
             $request->validate([
@@ -193,7 +197,7 @@ class PengaduanController extends Controller
                 'uraianxx' => 'required|string',
                 'rugixx' => 'nullable|string',
                 'bukti1xx.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-                'bukti2xx.*' => 'nullable|file|mimes:mp3,wav,mp4,mov|max:50240'
+                'bukti2xx.*' => 'nullable|file|mimes:mp3,wav,mp4,mov|max:50240',
             ]);
 
             $nama = $request->namaxx;
@@ -207,14 +211,16 @@ class PengaduanController extends Controller
             $bukti2_input = 'bukti2xx';
         }
 
-
-        $data = new PengaduanModel();
+        $data = new PengaduanModel;
         $data->user_id = auth()->id();
         $data->jenis_aduan = $request->jenis_aduan;
         $data->sub_aduan = $request->sub_aduan;
 
-        $data->no_registrasi = PengaduanModel::generateNoRegistrasi();
+        $data->nama_pelapor = $request->nama_pelapor ?? Auth::user()?->name;
+        $data->email_pelapor = $request->email_pelapor ?? Auth::user()?->email;
+        $data->no_hp_pelapor = $request->no_hp_pelapor ?? Auth::user()?->phone;
 
+        $data->no_registrasi = PengaduanModel::generateNoRegistrasi();
 
         $data->nama = $nama;
         $data->lokasi = $lokasi;
@@ -232,7 +238,7 @@ class PengaduanController extends Controller
         $bukti1 = [];
         if ($bukti1_input && $request->hasFile($bukti1_input)) {
             foreach ($request->file($bukti1_input) as $file) {
-                $name = time() . '_' . $file->getClientOriginalName();
+                $name = time().'_'.$file->getClientOriginalName();
                 $file->storeAs('pengaduan/bukti1', $name, 'public');
                 $bukti1[] = $name;
             }
@@ -243,26 +249,21 @@ class PengaduanController extends Controller
         $bukti2 = [];
         if ($bukti2_input && $request->hasFile($bukti2_input)) {
             foreach ($request->file($bukti2_input) as $file) {
-                $name = time() . '_' . $file->getClientOriginalName();
+                $name = time().'_'.$file->getClientOriginalName();
                 $file->storeAs('pengaduan/bukti2', $name, 'public');
                 $bukti2[] = $name;
             }
         }
         $data->bukti2 = json_encode($bukti2);
 
-
-
         $data->save();
 
         return response()->json([
             'success' => true,
             'message' => 'Laporan Anda sudah dikirimkan, mohon menunggu informasi selanjutnya.',
-            'no_registrasi' => $data->no_registrasi
+            'no_registrasi' => $data->no_registrasi,
         ]);
     }
-
-
-
 
     /**
      * HANDLE MULTIPLE UPLOAD
@@ -274,12 +275,13 @@ class PengaduanController extends Controller
             $files = $request->file($fieldName);
             foreach ($files as $file) {
                 // Generate nama file unik untuk menghindari konflik
-                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
                 // Simpan file ke storage/app/public/pengaduan/bukti
                 $path = $file->storeAs('pengaduan/bukti', $filename, 'public');
                 $paths[] = $path;
             }
         }
+
         // Kembalikan sebagai JSON array
         return json_encode($paths);
     }
@@ -287,10 +289,9 @@ class PengaduanController extends Controller
     public function ceksaldo()
     {
 
-
-
         return view('frontend.bprjas.pages.pengaduan.dashboarduser.ceksaldo');
     }
+
     public function lacakpengaduan()
     {
         $userId = Auth::id();
@@ -299,7 +300,6 @@ class PengaduanController extends Controller
         $data['pengaduan'] = PengaduanModel::where('user_id', $userId)
             ->orderBy('id', 'DESC')
             ->get();
-
 
         $data['lastPengaduan'] = PengaduanModel::where('user_id', $userId)
             ->orderBy('id', 'DESC')
@@ -321,24 +321,23 @@ class PengaduanController extends Controller
         return view('frontend.bprjas.pages.pengaduan.dashboarduser.lacakpengaduan', $data);
     }
 
-
     public function getDetail($id)
     {
         $data = PengaduanModel::where('user_id', Auth::id())
             ->where('id', $id)
             ->first();
 
-        if (!$data) {
+        if (! $data) {
             return response()->json([
                 'status' => false,
-                'message' => 'Data tidak ditemukan atau bukan milik Anda.'
+                'message' => 'Data tidak ditemukan atau bukan milik Anda.',
             ], 404);
         }
 
         return response()->json([
             'status' => true,
             'message' => 'Data ditemukan',
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

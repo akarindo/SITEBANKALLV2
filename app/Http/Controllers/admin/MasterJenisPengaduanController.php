@@ -6,16 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\MasterJenisPengaduanModel;
 use App\Models\PengaduanModel;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
-
 
 class MasterJenisPengaduanController extends Controller
 {
-    function index(Request $r)
+    public function index(Request $r)
     {
         $str = Carbon::now()->startOfMonth()->format('Y-m-d');
         if ($r->str) {
@@ -43,7 +42,6 @@ class MasterJenisPengaduanController extends Controller
             'form' => 'required',
             'sub_tujuan' => 'required',
 
-
         ]);
         if ($valid->fails()) {
             return Redirect::back()->withErrors($valid)->withInput($request->all())->with('error', 'Terjadi kesalahan validasi data');
@@ -55,11 +53,11 @@ class MasterJenisPengaduanController extends Controller
 
         ];
 
-
         $i = MasterJenisPengaduanModel::updateOrCreate(['id' => $request->txtId], $input);
         if ($i) {
             return Redirect::back()->with('success', 'Data Berhasil Disimpan');
         }
+
         return Redirect::back()->withInput($request->all())->with('error', 'Data Gagal Disimpan');
     }
 
@@ -68,13 +66,14 @@ class MasterJenisPengaduanController extends Controller
         $d = MasterJenisPengaduanModel::find($id);
         if ($d) {
             $d->delete();
+
             return Redirect::back()->with('success', 'Data Berhasil Dihapus');
         }
+
         return Redirect::back()->with('error', 'Data Gagal Dihapus');
     }
 
-
-    function showformpengaduan(Request $r)
+    public function showformpengaduan(Request $r)
     {
         $str = Carbon::now()->startOfYear()->format('Y-m-d');
         if ($r->str) {
@@ -93,25 +92,18 @@ class MasterJenisPengaduanController extends Controller
             ->get();
         $data['pengaduan'] = $pengaduanList;
 
-
-
-
-
         $data['p_jangkawaktudata'] = PengaduanModel::whereNotNull('p_data1')->orWhereNotNull('p_data2')->exists();
 
         // return $data;
         return view('admin.pengaduan.index', $data);
     }
 
-
     public function detail($id)
     {
         $p = PengaduanModel::with('jenis')->find($id);
         $p = PengaduanModel::with(['jenis', 'produkLayanan'])->find($id);
 
-
-
-        if (!$p) {
+        if (! $p) {
             return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404);
         }
 
@@ -119,11 +111,11 @@ class MasterJenisPengaduanController extends Controller
 
         return response()->json([
             // IDENTITAS PELAPOR
-            'nama' => $pelapor->name ?? '-',
-            'hp' => $pelapor->phone ?? '-',
-            'email' => $pelapor->email ?? '-',
+            'nama' => $p->nama_pelapor ?? $pelapor->name ?? '-',
+            'hp' => $p->no_hp_pelapor ?? $pelapor->phone ?? '-',
+            'email' => $p->email_pelapor ?? $pelapor->email ?? '-',
             'alamat' => $pelapor->alamat ?? '-',
-            'regis' => $pelapor ? $pelapor->created_at->format('d-m-Y H:i') : '-',
+            'regis' => $p->created_at ? $p->created_at->format('d-m-Y H:i') : '-',
 
             'jenis_aduan' => $p->jenis->nama ?? '-',
             'sub_aduan' => $p->sub_aduan,
@@ -140,8 +132,6 @@ class MasterJenisPengaduanController extends Controller
             'bukti1' => $this->decodeBukti($p->bukti1),
             'bukti2' => $this->decodeBukti($p->bukti2),
 
-
-
             'step_data' => $p->step_data ?? '0',
             'p_data1' => $p->p_data1,
             'p_data2' => $p->p_data2,
@@ -153,7 +143,6 @@ class MasterJenisPengaduanController extends Controller
             'v_mulaipenanganan' => $p->v_mulaipenanganan,
             'v_selesaipenanganan' => $p->v_selesaipenanganan,
 
-
             'p_proses_penanganan' => $p->p_proses_penanganan_decode ?? [],
             'p_perpanjanganpenanganan' => $p->p_perpanjanganpenanganan,
             'p_berakhirpenanganan' => $p->p_berakhirpenanganan,
@@ -161,20 +150,19 @@ class MasterJenisPengaduanController extends Controller
             's_w_selesai' => $p->s_w_selesai,
             's_ket_selesai' => $p->s_ket_selesai,
 
-
-
         ]);
     }
 
-
     private function decodeBukti($data)
     {
-        if (empty($data))
+        if (empty($data)) {
             return [];
+        }
 
         // Kalau sudah array
-        if (is_array($data))
+        if (is_array($data)) {
             return $data;
+        }
 
         // Decode pertama
         $decoded = json_decode($data, true);
@@ -187,14 +175,12 @@ class MasterJenisPengaduanController extends Controller
         return is_array($decoded) ? $decoded : [];
     }
 
-
-
     public function simpandatastep1($id)
     {
         // 1. Ambil data pengaduan berdasarkan ID
         $p = PengaduanModel::where('id', $id)->first();
 
-        if (!$p) {
+        if (! $p) {
             return response()->json(['success' => false, 'message' => 'Data pengaduan tidak ditemukan'], 404);
         }
 
@@ -203,9 +189,10 @@ class MasterJenisPengaduanController extends Controller
             'step_data' => '2',
 
         ]);
+
         return response()->json([
             'success' => true,
-            'message' => 'Data Identitas berhasil disimpan. Lanjut ke langkah Validasi.'
+            'message' => 'Data Identitas berhasil disimpan. Lanjut ke langkah Validasi.',
         ]);
     }
 
@@ -214,7 +201,7 @@ class MasterJenisPengaduanController extends Controller
     {
         $p = PengaduanModel::find($id);
 
-        if (!$p) {
+        if (! $p) {
             return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404);
         }
 
@@ -228,7 +215,7 @@ class MasterJenisPengaduanController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => "Perpanjangan Data 1 berhasil disimpan. Tenggat waktu: " . $dueDate->format('d M Y'),
+            'message' => 'Perpanjangan Data 1 berhasil disimpan. Tenggat waktu: '.$dueDate->format('d M Y'),
         ]);
     }
 
@@ -242,20 +229,23 @@ class MasterJenisPengaduanController extends Controller
             // Ini MENCEGAH dua request masuk pada waktu yang sama dan menyebabkan double save.
             $p = PengaduanModel::where('id', $id)->lockForUpdate()->first();
 
-            if (!$p) {
+            if (! $p) {
                 DB::rollBack();
+
                 return response()->json(['success' => false, 'message' => 'Data pengaduan tidak ditemukan.'], 404);
             }
 
             // 3. Validasi: Pastikan Perpanjangan 1 sudah dilakukan
             if (empty($p->p_data1)) {
                 DB::rollBack();
+
                 return response()->json(['success' => false, 'message' => 'Perpanjangan Data 1 harus diselesaikan terlebih dahulu.'], 400);
             }
 
             // 4. Validasi: Cegah Perpanjangan 2 diisi lebih dari sekali
-            if (!empty($p->p_data2)) {
+            if (! empty($p->p_data2)) {
                 DB::rollBack();
+
                 return response()->json(['success' => false, 'message' => 'Perpanjangan Data 2 sudah pernah dilakukan.'], 400);
             }
 
@@ -271,11 +261,12 @@ class MasterJenisPengaduanController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => "Perpanjangan Data 2 berhasil disimpan. Tenggat waktu berakhir pada: " . $newDueDate->format('d M Y'),
+                'message' => 'Perpanjangan Data 2 berhasil disimpan. Tenggat waktu berakhir pada: '.$newDueDate->format('d M Y'),
             ]);
 
         } catch (\Exception $e) {
             DB::rollBack(); // Rollback jika terjadi error
+
             // Anda bisa log $e->getMessage() di sini untuk debugging
             return response()->json(['success' => false, 'message' => 'Gagal memproses perpanjangan due to server error.'], 500);
         }
@@ -285,7 +276,7 @@ class MasterJenisPengaduanController extends Controller
     {
         $p = PengaduanModel::find($id);
 
-        if (!$p) {
+        if (! $p) {
             return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404);
         }
 
@@ -293,7 +284,7 @@ class MasterJenisPengaduanController extends Controller
 
         if ($request->hasFile('v_bukti_konfir')) {
             $file = $request->file('v_bukti_konfir');
-            $filename = time() . "_" . $file->getClientOriginalName();
+            $filename = time().'_'.$file->getClientOriginalName();
             $file->move(public_path('uploads/konfirmasi'), $filename);
         }
 
@@ -306,7 +297,6 @@ class MasterJenisPengaduanController extends Controller
         if ($request->filled('v_waktu_konfir')) {
             $waktuKonfirmasi = Carbon::parse($request->v_waktu_konfir);
         }
-
 
         $p->update([
             'v_jenis_konfir' => $request->v_jenis_konfir,
@@ -321,7 +311,7 @@ class MasterJenisPengaduanController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Data validasi berhasil disimpan!'
+            'message' => 'Data validasi berhasil disimpan!',
         ]);
     }
 
@@ -329,13 +319,13 @@ class MasterJenisPengaduanController extends Controller
     {
         $p = PengaduanModel::find($id);
 
-        if (!$p) {
+        if (! $p) {
             return response()->json(['success' => false, 'message' => 'Data tidak ditemukan']);
         }
 
         $prosesBaru = $request->proses;
 
-        if (!$prosesBaru || !is_array($prosesBaru)) {
+        if (! $prosesBaru || ! is_array($prosesBaru)) {
             return response()->json(['success' => false, 'message' => 'Format proses tidak valid']);
         }
 
@@ -347,7 +337,7 @@ class MasterJenisPengaduanController extends Controller
 
         // Ambil data lama dari DB, decode JSON-nya, jika kosong jadikan array kosong
         $prosesLama = json_decode($p->p_proses_penanganan, true);
-        if (!is_array($prosesLama)) {
+        if (! is_array($prosesLama)) {
             $prosesLama = [];
         }
 
@@ -360,16 +350,15 @@ class MasterJenisPengaduanController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Proses penanganan berhasil disimpan!'
+            'message' => 'Proses penanganan berhasil disimpan!',
         ]);
     }
-
 
     public function perpanjanganWaktuProses($id)
     {
         $p = PengaduanModel::find($id);
 
-        if (!$p) {
+        if (! $p) {
             return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404);
         }
 
@@ -390,12 +379,12 @@ class MasterJenisPengaduanController extends Controller
         $newDueDate = $baseDate->copy()->addDays(10);
 
         $p->update([
-            'p_perpanjanganpenanganan' => $newDueDate
+            'p_perpanjanganpenanganan' => $newDueDate,
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => "Perpanjangan waktu berhasil. Tenggat baru: " . $newDueDate->format('d M Y')
+            'message' => 'Perpanjangan waktu berhasil. Tenggat baru: '.$newDueDate->format('d M Y'),
         ]);
     }
 
@@ -404,26 +393,28 @@ class MasterJenisPengaduanController extends Controller
         // 1. Ambil data pengaduan berdasarkan ID
         $p = PengaduanModel::where('id', $id)->first();
 
-        if (!$p) {
+        if (! $p) {
             return response()->json(['success' => false, 'message' => 'Data pengaduan tidak ditemukan'], 404);
         }
 
         $p->update([
             'status' => 1,
             'step_data' => '4',
-            'p_berakhirpenanganan' => now()
+            'p_berakhirpenanganan' => now(),
 
         ]);
+
         return response()->json([
             'success' => true,
-            'message' => 'Proses Penanganan berhasil disimpan. Lanjut ke langkah Penyelesaian.'
+            'message' => 'Proses Penanganan berhasil disimpan. Lanjut ke langkah Penyelesaian.',
         ]);
     }
+
     public function simpandatastep4(Request $request, $id)
     {
         $p = PengaduanModel::find($id);
 
-        if (!$p) {
+        if (! $p) {
             return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404);
         }
 
@@ -437,21 +428,20 @@ class MasterJenisPengaduanController extends Controller
             's_w_selesai' => $request->s_w_selesai,       // waktu selesai dari input
             's_ket_selesai' => $request->s_ket_selesai,   // keterangan selesai
             'status' => 2,                                 // update status menjadi selesai
-            'step_data' => 5                               // step data 4
+            'step_data' => 5,                               // step data 4
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Data penyelesaian berhasil disimpan!'
+            'message' => 'Data penyelesaian berhasil disimpan!',
         ]);
     }
-
 
     public function SetingGugur($id)
     {
         $p = PengaduanModel::find($id);
 
-        if (!$p) {
+        if (! $p) {
             return response()->json(['success' => false, 'message' => 'Data tidak ditemukan']);
         }
 
@@ -462,10 +452,7 @@ class MasterJenisPengaduanController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Pengaduan telah digugurkan.'
+            'message' => 'Pengaduan telah digugurkan.',
         ]);
     }
-
-
-
 }
